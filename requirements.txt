@@ -59,3 +59,4 @@ vcsi
 youtube_search
 hachoir
 colour
+jikanpy
