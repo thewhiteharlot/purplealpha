@@ -57,3 +57,5 @@ PyGithub
 python-dateutil
 vcsi
 youtube_search
+hachoir
+colour
