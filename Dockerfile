@@ -1,9 +1,8 @@
 FROM kenhv/kensurbot:alpine
 
-RUN git clone https://github.com/thewhiteharlot/purplealpha -b purplealpha /One4uBot
-RUN chmod 777 /One4uBot
-ENV PATH="/One4uBot/bin:$PATH"
-WORKDIR /One4uBot
+RUN git clone -b purplealpha https://github.com/thewhiteharlot/purplealpha /root/userbot
+RUN chmod 777 /root/userbot
+WORKDIR /root/userbot/
 
 
 COPY ./sample_config.env ./userbot.session* ./config.env* /One4uBot/
