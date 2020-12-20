@@ -1,4 +1,4 @@
-# (One4uBot based) PurpleBot userbot project
+# (One4uBot based) purplealpha userbot project
 
 ![logo](https://i.ibb.co/xH67gZN/image.png)
 
@@ -26,7 +26,7 @@ Maneira fácil de obter STRING_SESSION. Clique no botão e depois no botão de c
 
 ### ou execute em seu terminal
 ```
-wget https://raw.githubusercontent.com/thewhiteharlot/PurpleBot/purplealpha/terminal_getstring.sh && bash terminal_getstring.sh
+wget https://raw.githubusercontent.com/thewhiteharlot/purplealpha/purplealpha/terminal_getstring.sh && bash terminal_getstring.sh
 ```
 
 ## Como hospedar?
@@ -35,7 +35,7 @@ wget https://raw.githubusercontent.com/thewhiteharlot/PurpleBot/purplealpha/term
 
 Certifique-se de ter uma conta do heroku e siga todos os passos necessários.
 
-<p align="left"><a href="https://heroku.com/deploy?template=https://github.com/thewhiteharlot/PurpleBot/tree/purplealpha"> <img src="https://www.herokucdn.com/deploy/button.svg" alt="Implantar no Heroku" /></a></p>
+<p align="left"><a href="https://heroku.com/deploy?template=https://github.com/thewhiteharlot/purplealpha/tree/purplealpha"> <img src="https://www.herokucdn.com/deploy/button.svg" alt="Implantar no Heroku" /></a></p>
 
 
 ## Créditos
@@ -53,4 +53,4 @@ e muitas outras pessoas que não são mencionadas aqui, mas podem ser encontrada
 
 ## Licença
 
-Este userbot é licenciado em [Raphielscape Public License](https://github.com/thewhiteharlot/PurpleBot/blob/purplealpha/LICENSE) - Versão 1.d, Outubro 2020
+Este userbot é licenciado em [Raphielscape Public License](https://github.com/thewhiteharlot/purplealpha/blob/purplealpha/LICENSE) - Versão 1.d, Outubro 2020

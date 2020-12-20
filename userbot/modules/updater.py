@@ -101,7 +101,7 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
 
         if BOTLOG:
             await event.client.send_message(
-                BOTLOG_CHATID, "#UPDATE \n" "Seu PurpleBot foi atualizado com sucesso."
+                BOTLOG_CHATID, "#UPDATE \n" "Seu purplealpha foi atualizado com sucesso."
             )
 
     else:
@@ -119,7 +119,7 @@ async def update(event, repo, ups_rem, ac_br):
 
     if BOTLOG:
         await event.client.send_message(
-            BOTLOG_CHATID, "#UPDATE \n" "Seu PurpleBot foi atualizado com sucesso."
+            BOTLOG_CHATID, "#UPDATE \n" "Seu purplealpha foi atualizado com sucesso."
         )
 
     # Spin a new instance of bot
@@ -209,7 +209,7 @@ async def upstream(event):
             "`Sincronizando com o último código estável do userbot, aguarde...`"
         )
     else:
-        await event.edit("`Atualizando PurpleBot...`")
+        await event.edit("`Atualizando purplealpha...`")
     if conf == "now":
         await update(event, repo, ups_rem, ac_br)
     elif conf == "deploy":

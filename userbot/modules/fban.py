@@ -33,7 +33,7 @@ async def fban(event):
 
     if fban_id == self_user.id or fban_id == "@" + self_user.username:
         return await event.edit(
-            "**Erro: Esta ação foi impedida pelos protocolos de autopreservação do PurpleBot.**"
+            "**Erro: Esta ação foi impedida pelos protocolos de autopreservação do purplealpha.**"
         )
 
     if len((fed_list := get_flist())) == 0:

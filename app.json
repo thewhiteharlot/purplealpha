@@ -1,6 +1,6 @@
 {
-  "name": "Telegram PurpleBot",
-  "description": "[PurpleBot] Um userbot modular do Telegram em execução no Python 3.8+ com um banco de dados sqlalchemy.",
+  "name": "Telegram purplealpha",
+  "description": "[purplealpha] Um userbot modular do Telegram em execução no Python 3.8+ com um banco de dados sqlalchemy.",
   "logo": "https://i.ibb.co/fN3nTx0/image.png",
   "keywords": [
     "telegram",
@@ -9,7 +9,7 @@
     "modular",
     "productivity"
   ],
-  "repository": "https://github.com/thewhiteharlot/PurpleBot",
+  "repository": "https://github.com/thewhiteharlot/purplealpha",
   "website": "https://telegra.ph/How-to-host-a-Telegram-Userbot-11-02",
   "success_url": "https://t.me/redminote8brazil",
   "stack": "container",
@@ -166,7 +166,7 @@
     },
     "DEFAULT_BIO": {
       "description": "Default profile bio.",
-      "value": "[PM = Report Spam] I ❤ ️PurpleBot",
+      "value": "[PM = Report Spam] I ❤ ️purplealpha",
       "required": false
     },
     "ALIVE_NAME": {

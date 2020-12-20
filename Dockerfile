@@ -1,6 +1,6 @@
 FROM movecrew/one4ubot:alpine-latest
 
-RUN git clone https://github.com/thewhiteharlot/PurpleBot -b purplealpha /One4uBot
+RUN git clone https://github.com/thewhiteharlot/purplealpha -b purplealpha /One4uBot
 RUN chmod 777 /One4uBot
 ENV PATH="/One4uBot/bin:$PATH"
 WORKDIR /One4uBot

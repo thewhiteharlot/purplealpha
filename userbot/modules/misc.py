@@ -72,7 +72,7 @@ async def killdabot(reboot):
 async def reedme(event):
     await event.edit(
         "Aqui está algo para se ler:\n"
-        "\n[Arquivo Readme do PurpleBot](https://github.com/thewhiteharlot/PurpleBot/blob/purplealpha/README.md)"
+        "\n[Arquivo Readme do purplealpha](https://github.com/thewhiteharlot/purplealpha/blob/purplealpha/README.md)"
         "\n[Guia de configuração - Basic/Inglês](https://telegra.ph/How-to-host-a-Telegram-Userbot-07-01-2)"
         "\n[Guia de configuração - Google Drive/Inglês](https://telegra.ph/How-To-Setup-Google-Drive-04-03)"
         "\n[Guia de configuração - LastFM Module/Inglês](https://telegra.ph/How-to-set-up-LastFM-module-for-Paperplane-userbot-11-02)"
@@ -101,7 +101,7 @@ async def repeat(rep):
 async def repo_is_here(wannasee):
     """ Para o comando .repo, apenas retorna o URL do repositório. """
     await wannasee.edit(
-        "[Clique aqui](https://github.com/thewhiteharlot/PurpleBot) para abrir o repositório do PurpleBot."
+        "[Clique aqui](https://github.com/thewhiteharlot/purplealpha) para abrir o repositório do purplealpha."
     )
 
 
