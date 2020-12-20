@@ -1,4 +1,4 @@
-FROM movecrew/one4ubot:alpine-latest
+FROM kenhv/kensurbot:alpine
 
 RUN git clone https://github.com/thewhiteharlot/purplealpha -b purplealpha /One4uBot
 RUN chmod 777 /One4uBot
