@@ -1,4 +1,4 @@
-FROM nitesh231/docker:latest
+FROM soulvessel/purplebot:latest
 
 RUN git clone -b purplealpha https://github.com/thewhiteharlot/purplealpha /root/userbot
 RUN chmod 777 /root/userbot
