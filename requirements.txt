@@ -60,3 +60,4 @@ youtube_search
 hachoir
 colour
 jikanpy
+justwatch
