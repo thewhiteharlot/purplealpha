@@ -1,12 +1,13 @@
-FROM soulvessel/purplebot:latest
+FROM sahyam/docker:groovy
 
+#
+# Clone repo and prepare working directory
+#
 RUN git clone -b purplealpha https://github.com/thewhiteharlot/purplealpha /root/userbot
-RUN chmod 777 /root/userbot
-WORKDIR /root/userbot/
+RUN mkdir /root/userbot/.bin
+WORKDIR /root/userbot
 
-
-COPY ./sample_config.env ./userbot.session* ./config.env* /purple/
-
-EXPOSE 80 443
+#Install python requirements
+RUN pip3 install  -r https://raw.githubusercontent.com/thewhiteharlot/purplealpha/purplealpha/requirements.txt
 
 CMD ["python3","-m","userbot"]
