@@ -4,7 +4,7 @@
 
 from typing import Tuple, Optional
 from telethon.tl.types import InputMessagesFilterMusic
-from telethon.errors import BadRequest
+from telethon.errors import BadRequestError
 from userbot.events import register
 
 def get_file_id_and_ref(message) -> Tuple[Optional[str], Optional[str]]:
