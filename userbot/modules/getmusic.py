@@ -134,7 +134,7 @@ async def _(event):
         artist = event.pattern_match.group(2)
         song = event.pattern_match.group(3)
     track = str(artist) + " - " + str(song)
-    chat = "@SpotifyMusicDownloaderBot"
+    chat = "@DeezerMusicBot"
     await event.edit("```Obtendo sua música```")
     try:
         async with bot.conversation(chat) as conv:
@@ -142,19 +142,19 @@ async def _(event):
             await event.edit("`Baixando...`")
             try:
                 response = conv.wait_event(
-                    events.NewMessage(incoming=True, from_users=752979930)
+                    events.NewMessage(incoming=True, from_users=595898211)
                 )
                 msg = await bot.send_message(chat, track)
                 respond = await response
                 res = conv.wait_event(
-                    events.NewMessage(incoming=True, from_users=752979930)
+                    events.NewMessage(incoming=True, from_users=595898211)
                 )
                 r = await res
                 """- don't spam notif -"""
                 await bot.send_read_acknowledge(conv.chat_id)
             except YouBlockedUserError:
                 await event.reply(
-                    "`Desbloqueie `@SpotifyMusicDownloaderBot` e tente novamente`"
+                    "`Desbloqueie `@DeezerMusicBot` e tente novamente`"
                 )
                 return
             await bot.forward_messages(event.chat_id, respond.message)
@@ -162,7 +162,7 @@ async def _(event):
         await event.delete()
     except TimeoutError:
         return await event.edit(
-            "`Erro: `@SpotifyMusicDownloaderBot` não está respondendo!.`"
+            "`Erro: `@DeezerMusicBot` não está respondendo!.`"
         )
 
 
@@ -234,7 +234,7 @@ CMD_HELP.update(
         "\n\n.songl <Spotify/Deezer Link>"
         "\nUso: Baixa a música pelo link (@MusicsHunterBot)"
         "\n\n.songf <Artista - Título da música>"
-        "\nUso: Baixa a música pelo nome (@SpotifyMusicDownloaderBot)"
+        "\nUso: Baixa a música pelo nome (@DeezerMusicBot)"
         "\n\n.songn now"
         "\nUso: Baixa o scrobble atual do LastFM com @WooMaiBot"
         "\n\n.songf now"
