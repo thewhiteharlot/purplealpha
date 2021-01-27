@@ -91,6 +91,6 @@ CMD_HELP.update(
 \nUso: Como se o spam de texto não fosse suficiente !!\
 \n\n.delayspam <atraso> <número> <texto>\
 \nUso: .bigspam, mas com atraso personalizado.\
-\n\n\nNOTa : Spamme por sua própria conta e risco !!"
+\n\n\nNOTA: Spamme por sua própria conta e risco !!"
     }
 )

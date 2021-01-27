@@ -80,10 +80,10 @@ async def ANTI_SPAMBOTS(welcm):
                     check_user = await welcm.client.get_entity(user_id)
 
                     # DEBUGGING. LEAVING IT HERE FOR SOME TIME ###
-                    print(f"User Joined: {check_user.first_name} [ID: {check_user.id}]")
+                    print(f"Usuário registrado: {check_user.first_name} [ID: {check_user.id}]")
                     print(f"Chat: {welcm.chat.title}")
-                    print(f"Time: {join_time}")
-                    print(f"Message Sent: {message.text}\n\n[Time: {message_date}]")
+                    print(f"Horário: {join_time}")
+                    print(f"Mensagem enviada: {message.text}\n\n[Horário: {message_date}]")
                     ##############################################
 
                     try:
@@ -129,7 +129,7 @@ async def ANTI_SPAMBOTS(welcm):
                                 spambot = True
 
                     if spambot:
-                        print(f"Potential Spam Message: {message.text}")
+                        print(f"Possível mensagem de spam: {message.text}")
                         await message.delete()
                         break
 

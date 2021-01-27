@@ -65,7 +65,7 @@ async def magnet_download(event):
         download = aria2.add_magnet(magnet_uri)
     except Exception as e:
         LOGS.info(str(e))
-        return await event.edit("Error:\n`" + str(e) + "`")
+        return await event.edit("Erro:\n`" + str(e) + "`")
     gid = download.gid
     await check_progress_for_dl(gid=gid, event=event, previous=None)
     await sleep(5)
@@ -156,7 +156,7 @@ async def show_all(event):
             + str(download.total_length_string())
             + "\nStatus: "
             + str(download.status)
-            + "\nETA:  "
+            + "\nTempo estimado:  "
             + str(download.eta_string())
             + "\n\n"
         )
