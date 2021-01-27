@@ -57,7 +57,6 @@ PyGithub
 python-dateutil
 vcsi
 youtube_search
-colour
-jikanpy
-justwatch
-selenium
+CairoSVG
+asyncurban
+lottie
