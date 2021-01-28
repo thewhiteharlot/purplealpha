@@ -133,7 +133,7 @@ ANTI_SPAMBOT_SHOUT = sb(os.environ.get("ANTI_SPAMBOT_SHOUT") or "False")
 ALIVE_NAME = str(os.environ.get("ALIVE_NAME")) or None
 
 # Default .alive logo
-ALIVE_LOGO = os.environ.get("ALIVE_LOGO") or None
+ALIVE_LOGO = os.environ.get("ALIVE_LOGO") or "https://media1.tenor.com/images/bc78ea2aa84a3776d6b54d6a04e9da86/tenor.gif?itemid=17626280"
 
 # Time & Date - Country and Time Zone
 COUNTRY = str(os.environ.get("COUNTRY") or "")
