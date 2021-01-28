@@ -83,9 +83,9 @@ async def updateProfile(userObj, restore=False):
     )
 
 
-CMD_HELP.update({
-    "clone":
-    ">`.clone` (as a reply to a message of a user)\
+CMD_HELP.update(
+    {
+        "clone": ">`.clone` (as a reply to a message of a user)\
     \nUsage: Steals the user's identity.\
     \n\n>`.clone <username/ID>`\
     \nUsage: Steals the given username/ID's identity.\
