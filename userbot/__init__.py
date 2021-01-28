@@ -129,7 +129,7 @@ WOLFRAM_ID = os.environ.get("WOLFRAM_ID") or None
 ANTI_SPAMBOT = sb(os.environ.get("ANTI_SPAMBOT") or "False")
 ANTI_SPAMBOT_SHOUT = sb(os.environ.get("ANTI_SPAMBOT_SHOUT") or "False")
 
--# Default .alive name
+# Default .alive name
 ALIVE_NAME = str(os.environ.get("ALIVE_NAME")) or None
 
 # Default .alive logo
