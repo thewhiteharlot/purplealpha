@@ -15,7 +15,7 @@ if not hasattr(STORAGE, "userObj"):
 async def impostor(event):
     inputArgs = event.pattern_match.group(1)
 
-    if "revert" in inputArgs:
+    if "restore" in inputArgs:
         await event.edit("**Voltando à minha verdadeira identidade...**")
         if not STORAGE.userObj:
             return await event.edit(
@@ -84,7 +84,7 @@ CMD_HELP.update({
     \nUso: Rouba a identidade do usuário.\
     \n\n>`.impostor <nome do usuário/ID>`\
     \nUso: Rouba o nome de usuário/id fornecida.\
-    \n\n>`.impostor revert`\
+    \n\n>`.impostor restore`\
     \nUso: Reverta para sua verdadeira identidade.\
     \n\n**Sempre restaure antes de executá-lo novamente.**\
 "
