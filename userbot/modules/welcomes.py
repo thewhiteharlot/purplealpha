@@ -134,10 +134,14 @@ async def show_welcome(event):
         msg_o = await event.client.get_messages(
             entity=BOTLOG_CHATID, ids=int(cws.f_mesg_id)
         )
-        await event.edit("`Atualmente, estou dando as boas-vindas a novos usuários com esta nota de boas-vindas.`")
+        await event.edit(
+            "`Atualmente, estou dando as boas-vindas a novos usuários com esta nota de boas-vindas.`"
+        )
         await event.reply(msg_o.message, file=msg_o.media)
     elif cws and cws.reply:
-        await event.edit("`Atualmente, estou dando as boas-vindas a novos usuários com esta nota de boas-vindas.`")
+        await event.edit(
+            "`Atualmente, estou dando as boas-vindas a novos usuários com esta nota de boas-vindas.`"
+        )
         await event.reply(cws.reply)
 
 

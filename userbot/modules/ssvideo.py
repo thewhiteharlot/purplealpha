@@ -9,6 +9,7 @@ import os
 import time
 
 from telethon.tl.types import DocumentAttributeFilename
+
 from userbot import CMD_HELP, bot
 from userbot.events import register
 from userbot.utils import progress
@@ -27,12 +28,17 @@ async def ssvideo(framecap):
             return await framecap.edit("`hey..não bote tantos quadros`")
     except BaseException:
         return await framecap.edit("`Insira o número de quadros!`")
-    if (reply_message.photo
-            or (DocumentAttributeFilename(file_name="AnimatedSticker.tgs")
-                in reply_message.media.document.attributes)
-            or (DocumentAttributeFilename(file_name="sticker.webp")
-                in reply_message.media.document.attributes)
-            ):
+    if (
+        reply_message.photo
+        or (
+            DocumentAttributeFilename(file_name="AnimatedSticker.tgs")
+            in reply_message.media.document.attributes
+        )
+        or (
+            DocumentAttributeFilename(file_name="sticker.webp")
+            in reply_message.media.document.attributes
+        )
+    ):
         return await framecap.edit("`Arquivos não suportados!`")
     c_time = time.time()
     await framecap.edit("`Baixando mídia...`")

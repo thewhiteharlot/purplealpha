@@ -38,9 +38,7 @@ async def on_add_black_list(addbl):
     for trigger in to_blacklist:
         sql.add_to_blacklist(addbl.chat_id, trigger.lower())
     await addbl.edit(
-        "Adicionados {} gatilhos à lista negra no chat atual".format(
-            len(to_blacklist)
-        )
+        "Adicionados {} gatilhos à lista negra no chat atual".format(len(to_blacklist))
     )
 
 

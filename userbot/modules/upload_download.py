@@ -100,7 +100,9 @@ async def download(target_file):
                 "Baixado para `{}` com sucesso !!".format(downloaded_file_name)
             )
     else:
-        await target_file.edit("Responda a uma mensagem para fazer o download no meu servidor local.")
+        await target_file.edit(
+            "Responda a uma mensagem para fazer o download no meu servidor local."
+        )
 
 
 @register(pattern=r".uploadir (.*)", outgoing=True)
