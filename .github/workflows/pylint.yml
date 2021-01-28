@@ -33,5 +33,5 @@ jobs:
           commit_options: '--no-verify'
           repository: .
           commit_user_name: thewhiteharlot
-          commit_user_email: 
+          commit_user_email: scryptt@gmail.com
           commit_author: thewhiteharlot
