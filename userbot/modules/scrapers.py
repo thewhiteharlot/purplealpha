@@ -14,7 +14,6 @@ import time
 from asyncio import sleep
 from urllib.parse import quote_plus
 
-import asyncurban
 from bs4 import BeautifulSoup
 from emoji import get_emoji_regexp
 from google_trans_new import LANGUAGES, google_translator
@@ -26,10 +25,16 @@ from telethon.tl.types import DocumentAttributeAudio
 from wikipedia import summary
 from wikipedia.exceptions import DisambiguationError, PageError
 from youtube_dl import YoutubeDL
-from youtube_dl.utils import (ContentTooShortError, DownloadError,
-                              ExtractorError, GeoRestrictedError,
-                              MaxDownloadsReached, PostProcessingError,
-                              UnavailableVideoError, XAttrMetadataError)
+from youtube_dl.utils import (
+    ContentTooShortError,
+    DownloadError,
+    ExtractorError,
+    GeoRestrictedError,
+    MaxDownloadsReached,
+    PostProcessingError,
+    UnavailableVideoError,
+    XAttrMetadataError,
+)
 from youtube_search import YoutubeSearch
 
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
@@ -76,10 +81,7 @@ async def carbon_api(e):
     )
     params = {
         "cmd": "Page.setDownloadBehavior",
-        "params": {
-            "behavior": "allow",
-            "downloadPath": dl_path
-        },
+        "params": {"behavior": "allow", "downloadPath": dl_path},
     }
     driver.execute("send_command", params)
     driver.find_element_by_xpath("//button[@id='export-menu']").click()
@@ -94,8 +96,10 @@ async def carbon_api(e):
     await e.client.send_file(
         e.chat_id,
         file_path,
-        caption=("Feito com [Carbon](https://carbon.now.sh/about/),"
-                 "\num projeto por [Dawn Labs](https://dawnlabs.io/)"),
+        caption=(
+            "Feito com [Carbon](https://carbon.now.sh/about/),"
+            "\num projeto por [Dawn Labs](https://dawnlabs.io/)"
+        ),
         force_document=True,
         reply_to=e.message.reply_to_msg_id,
     )
@@ -445,23 +449,23 @@ async def imdb(e):
 @register(outgoing=True, pattern=r"^\.trt(?: |$)([\s\S]*)")
 async def translateme(trans):
     """ For .trt command, translate the given text using Google Translate. """
-    
+
     if trans.is_reply and not trans.pattern_match.group(1):
         message = await trans.get_reply_message()
         message = str(message.message)
     else:
-                message = str(trans.pattern_match.group(1))
+        message = str(trans.pattern_match.group(1))
 
     if not message:
         return await trans.edit(
-            "**Envie algum texto ou responda a uma mensagem para traduzir!**")
+            "**Envie algum texto ou responda a uma mensagem para traduzir!**"
+        )
 
         await trans.edit("**Processando...**")
     translator = google_translator()
 
     try:
-        reply_text = translator.translate(deEmojify(message),
-                                          lang_tgt=TRT_LANG)
+        reply_text = translator.translate(deEmojify(message), lang_tgt=TRT_LANG)
     except ValueError:
         return await trans.edit(
             "**Idioma inválido selecionado, use **`.lang tts <código do idioma>`**.**"
@@ -549,7 +553,7 @@ async def yt_search(video_q):
         except IndexError:
             break
 
-    await video_q.edit(output, link_preview=False)        
+    await video_q.edit(output, link_preview=False)
 
 
 @register(outgoing=True, pattern=r".rip(audio|video) (.*)")

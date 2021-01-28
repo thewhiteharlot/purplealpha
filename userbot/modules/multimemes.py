@@ -11,12 +11,11 @@ import asyncio
 import os
 import random
 import re
-import textwrap
 import time
 from asyncio.exceptions import TimeoutError
 
 from glitch_this import ImageGlitcher
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image
 from telethon import events, functions, types
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 
@@ -260,7 +259,9 @@ async def fryerrr(fry):
             await fry.reply("`Desbloqueie` @image_deepfrybot`...`")
             return
         if response.text.startswith("Forward"):
-            await fry.edit("`Desative sua configuração de privacidade de encaminhamento...`")
+            await fry.edit(
+                "`Desative sua configuração de privacidade de encaminhamento...`"
+            )
         else:
             downloaded_file_name = await fry.client.download_media(
                 response.media, TEMP_DOWNLOAD_DIRECTORY

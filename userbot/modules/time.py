@@ -94,7 +94,9 @@ async def time_func(tdata):
     dtnow = dt.now(tz(time_zone)).strftime(t_form)
 
     if c_name != COUNTRY:
-        await tdata.edit(f"`São`  **{dtnow}**  `em {c_name}({time_zone} fuso-horário).`")
+        await tdata.edit(
+            f"`São`  **{dtnow}**  `em {c_name}({time_zone} fuso-horário).`"
+        )
         return
 
     elif COUNTRY:

@@ -60,9 +60,7 @@ async def get_chatinfo(event):
             await event.edit("`Canal/grupo inválido`")
             return None
         except ChannelPrivateError:
-            await event.edit(
-                "`Este é um canal/grupo privado ou fui banido de lá`"
-            )
+            await event.edit("`Este é um canal/grupo privado ou fui banido de lá`")
             return None
         except ChannelPublicGroupNaError:
             await event.edit("`Canal ou supergrupo não existe`")
@@ -249,7 +247,9 @@ async def fetch_info(chat, event):
     if messages_sent:
         caption += f"Mensagens enviadas: <code>{messages_sent}</code>\n"
     elif messages_sent_alt:
-        caption += f"Mensagens enviadas: <code>{messages_sent_alt}</code> {warn_emoji}\n"
+        caption += (
+            f"Mensagens enviadas: <code>{messages_sent_alt}</code> {warn_emoji}\n"
+        )
     if members is not None:
         caption += f"Membros: <code>{members}</code>\n"
     if admins is not None:

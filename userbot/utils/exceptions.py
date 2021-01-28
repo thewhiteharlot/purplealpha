@@ -4,7 +4,8 @@
 # you may not use this file except in compliance with the License.
 #
 
+
 class CancelProcess(Exception):
     """
-       Cancel Process
+    Cancel Process
     """

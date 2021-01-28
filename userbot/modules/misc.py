@@ -28,7 +28,11 @@ async def randomise(items):
         return
     index = randint(1, len(itemo) - 1)
     await items.edit(
-        "**Pesquisa: **\n`" + items.text[8:] + "`\n**Resultado: **\n`" + itemo[index] + "`"
+        "**Pesquisa: **\n`"
+        + items.text[8:]
+        + "`\n**Resultado: **\n`"
+        + itemo[index]
+        + "`"
     )
 
 

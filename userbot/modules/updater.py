@@ -188,9 +188,7 @@ async def upstream(event):
     if conf is None and force_update is False:
         changelog_str = f"**Nova ATUALIZAÇÃO disponível para [{ac_br}]:\n\nLISTA DE MUDANÇAS:**\n`{changelog}`"
         if len(changelog_str) > 4096:
-            await event.edit(
-                "`Lista de mudanças muito grande, enviando como arquivo.`"
-            )
+            await event.edit("`Lista de mudanças muito grande, enviando como arquivo.`")
             file = open("output.txt", "w+")
             file.write(changelog_str)
             file.close()
@@ -202,7 +200,9 @@ async def upstream(event):
             remove("output.txt")
         else:
             await event.edit(changelog_str)
-        return await event.respond('`Digite ".update now" ou ".update deploy" para atualizar`')
+        return await event.respond(
+            '`Digite ".update now" ou ".update deploy" para atualizar`'
+        )
 
     if force_update:
         await event.edit(

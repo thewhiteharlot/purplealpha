@@ -40,7 +40,9 @@ async def remove_notes(clr):
         return
     notename = clr.pattern_match.group(1)
     if rm_note(clr.chat_id, notename) is False:
-        return await clr.edit("`Não foi possível encontrar a nota:` **{}**".format(notename))
+        return await clr.edit(
+            "`Não foi possível encontrar a nota:` **{}**".format(notename)
+        )
     else:
         return await clr.edit("`Nota excluída com sucesso:` **{}**".format(notename))
 
@@ -136,7 +138,9 @@ async def kick_marie_notes(kick):
             i = i.replace("`", "")
             await kick.reply("/clear %s" % (i.strip()))
         await sleep(0.3)
-    await kick.respond("```Notas de bots excluídas com sucesso yaay!```\n Me dê biscoitos!")
+    await kick.respond(
+        "```Notas de bots excluídas com sucesso yaay!```\n Me dê biscoitos!"
+    )
     if BOTLOG:
         await kick.client.send_message(
             BOTLOG_CHATID, "Limpei todas as notas em " + str(kick.chat_id)
