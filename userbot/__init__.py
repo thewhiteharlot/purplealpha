@@ -139,14 +139,14 @@ ALIVE_LOGO = os.environ.get("ALIVE_LOGO") or None
 COUNTRY = str(os.environ.get("COUNTRY") or "")
 TZ_NUMBER = int(os.environ.get("TZ_NUMBER") or 1)
 
-# Version of One4uBot
-USERBOT_VERSION = os.environ.get("USERBOT_VERSION") or "4.2"
+# Version of PurpleBot
+USERBOT_VERSION = os.environ.get("USERBOT_VERSION") or "4x-Alpha"
 
 # User Terminal alias
-USER_TERM_ALIAS = os.environ.get("USER_TERM_ALIAS") or "purplealpha"
+USER_TERM_ALIAS = os.environ.get("USER_TERM_ALIAS") or "Purple [alpha]"
 
 # Updater alias
-UPDATER_ALIAS = os.environ.get("UPDATER_ALIAS") or "purplealpha"
+UPDATER_ALIAS = os.environ.get("UPDATER_ALIAS") or "Purple [alpha]"
 
 # Zipfile module
 ZIP_DOWNLOAD_DIRECTORY = os.environ.get("ZIP_DOWNLOAD_DIRECTORY") or "./zips"
