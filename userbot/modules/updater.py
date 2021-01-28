@@ -201,7 +201,7 @@ async def upstream(event):
         else:
             await event.edit(changelog_str)
         return await event.respond(
-            '`Digite ".update now" ou ".update deploy" para atualizar`'
+            '`Digite ".update deploy" ou ".update now" para atualizar`'
         )
 
     if force_update:
@@ -222,8 +222,8 @@ CMD_HELP.update(
         "update": ".update"
         "\nUso: Checa se o repositório tem atualizações e mostra lista de mudanças."
         "\n\n.update now"
-        "\nUso: Atualiza seu userbot, caso hajam alterações no repositório."
+        "\nUso: Atualiza seu userbot, caso hajam alterações no repositório. (As mudanças serão revertidas no próximo update, dê preferência ao Deploy)"
         "\n\n.update deploy"
-        "\nUso: Atualiza seu userbot no heroku, caso hajam alterações no repositório ."
+        "\nUso: Atualiza seu userbot no heroku, caso hajam alterações no repositório (Recomendado)."
     }
 )
