@@ -15,13 +15,16 @@ import urllib
 import requests
 from bs4 import BeautifulSoup
 from PIL import Image
+
 from userbot import CMD_HELP, bot
 from userbot.events import register
 
 opener = urllib.request.build_opener()
-useragent = ("Mozilla/5.0 (Linux; Android 10; SM-G975F) "
-             "AppleWebKit/537.36 (KHTML, like Gecko) "
-             "Chrome/80.0.3987.149 Mobile Safari/537.36")
+useragent = (
+    "Mozilla/5.0 (Linux; Android 10; SM-G975F) "
+    "AppleWebKit/537.36 (KHTML, like Gecko) "
+    "Chrome/80.0.3987.149 Mobile Safari/537.36"
+)
 opener.addheaders = [("User-agent", useragent)]
 
 
@@ -54,18 +57,16 @@ async def okgoogle(img):
 
     # https://stackoverflow.com/questions/23270175/google-reverse-image-search-using-post-request#28792943
     searchUrl = "https://www.google.com/searchbyimage/upload"
-    multipart = {
-        "encoded_image": (name, open(name, "rb")),
-        "image_content": ""
-    }
+    multipart = {"encoded_image": (name, open(name, "rb")), "image_content": ""}
     response = requests.post(searchUrl, files=multipart, allow_redirects=False)
     fetchUrl = response.headers["Location"]
 
     if response == 400:
         return await img.edit("**Falha no processamento.**")
 
-    await img.edit("**Imagem enviada ao Google com sucesso.**"
-                   "\n**Analisando fonte agora.**")
+    await img.edit(
+        "**Imagem enviada ao Google com sucesso.**" "\n**Analisando fonte agora.**"
+    )
     os.remove(name)
     match = await ParseSauce(fetchUrl + "&preferences?hl=en&fg=1#languages")
     guess = match["best_guess"]
@@ -82,14 +83,18 @@ async def okgoogle(img):
     lim = int(3) if lim < 0 else lim
 
     if lim == 0:
-        return await img.edit(f"**Melhor resultado:** `{guess}`\
+        return await img.edit(
+            f"**Melhor resultado:** `{guess}`\
                               \n\n[Imagens visualmente semelhantes]({fetchUrl})\
-                              \n\n[Resultados para {guess}]({imgspage})")
+                              \n\n[Resultados para {guess}]({imgspage})"
+        )
 
-    await img.edit(f"**Melhor resultado:** `{guess}`\
+    await img.edit(
+        f"**Melhor resultado:** `{guess}`\
                    \n\n[Imagens visualmente semelhantes]({fetchUrl})\
                    \n\n[Resultados para {guess}]({imgspage})\
-                   \n\n**Buscando imagens...**")
+                   \n\n**Buscando imagens...**"
+    )
 
     images = await scam(match, lim)
     yeet = []
@@ -105,15 +110,18 @@ async def okgoogle(img):
             reply_to=img,
         )
     except:
-        return await img.edit(f"**Melhor resultado:** `{guess}`\
+        return await img.edit(
+            f"**Melhor resultado:** `{guess}`\
                               \n\n[Imagens visualmente semelhantes]({fetchUrl})\
                               \n\n[Resultados para {guess}]({imgspage})\
                               \n\n**Ocorreu um erro ao enviar as imagens.**"
-                              )
+        )
 
-    await img.edit(f"**Melhor resultado:** `{guess}`\
+    await img.edit(
+        f"**Melhor resultado:** `{guess}`\
                    \n\n[Imagens visualmente semelhantes]({fetchUrl})\
-                   \n\n[Resultados para {guess}]({imgspage})")
+                   \n\n[Resultados para {guess}]({imgspage})"
+    )
 
 
 async def ParseSauce(googleurl):
@@ -125,8 +133,9 @@ async def ParseSauce(googleurl):
 
     try:
         for similar_image in soup.findAll("input", {"class": "gLFyf"}):
-            url = "https://www.google.com/search?tbm=isch&q=" + \
-                urllib.parse.quote_plus(similar_image.get("value"))
+            url = "https://www.google.com/search?tbm=isch&q=" + urllib.parse.quote_plus(
+                similar_image.get("value")
+            )
             results["similar_images"] = url
     except BaseException:
         pass
@@ -158,11 +167,12 @@ async def scam(results, lim):
     return imglinks
 
 
-CMD_HELP.update({
-    "reverse":
-    ">`.reverse [número de resultados] <opcional>`"
-    "\nUso: Responda a uma foto/sticker para fazer uma busca reversa no Google."
-    "\nO número de resultados pode ser especificado, o padrão é 3."
-    "\nSe o contador for 0, apenas informações e links serão fornecidos."
-    "\nO bot pode falhar no upload de imagens se um grande número de resultados for solicitado."
-})
+CMD_HELP.update(
+    {
+        "reverse": ">`.reverse [número de resultados] <opcional>`"
+        "\nUso: Responda a uma foto/sticker para fazer uma busca reversa no Google."
+        "\nO número de resultados pode ser especificado, o padrão é 3."
+        "\nSe o contador for 0, apenas informações e links serão fornecidos."
+        "\nO bot pode falhar no upload de imagens se um grande número de resultados for solicitado."
+    }
+)
