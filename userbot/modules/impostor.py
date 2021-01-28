@@ -79,13 +79,13 @@ async def updateProfile(userObj, restore=False):
 
 
 CMD_HELP.update({
-    "impostor":
-    ">`.impostor` (as a reply to a message of a user)\
-    \nUsage: Steals the user's identity.\
-    \n\n>`.impostor <username/ID>`\
-    \nUsage: Steals the given username/ID's identity.\
-    \n\n>`.impostor restore`\
-    \nUsage: Revert back to your true identity.\
-    \n\n**Always restore before running it again.**\
+  "clone":
+    ">`.clone` (como uma resposta a uma mensagem de um usuário)\
+    \nUso: Rouba a identidade do usuário.\
+    \n\n>`.impostor <nome do usuário/ID>`\
+    \nUso: Rouba o nome de usuário/id fornecida.\
+    \n\n>`.impostor revert`\
+    \nUso: Reverta para sua verdadeira identidade.\
+    \n\n**Sempre restaure antes de executá-lo novamente.**\
 "
 })

@@ -29,9 +29,9 @@ jobs:
       # commit changes
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: 'black autoformat'
+          commit_message: 'black/lint autofix'
           commit_options: '--no-verify'
           repository: .
           commit_user_name: thewhiteharlot
-          commit_user_email: 
+          commit_user_email: scryptt@gmail.com
           commit_author: thewhiteharlot
