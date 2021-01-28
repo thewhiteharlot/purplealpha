@@ -34,4 +34,4 @@ jobs:
           repository: .
           commit_user_name: thewhiteharlot
           commit_user_email: scryptt@gmail.com
-          commit_author: thewhiteharlot
+          commit_author: thewhiteharlot<scryptt@gmail.com>
