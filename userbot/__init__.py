@@ -1,23 +1,22 @@
 # Copyright (C) 2019 The Raphielscape Company LLC.
 #
 # Licensed under the Raphielscape Public License, Version 1.d (the "License");
+# Copyright (C) 2019 The Raphielscape Company LLC.
+#
+# Licensed under the Raphielscape Public License, Version 1.c (the "License");
 # you may not use this file except in compliance with the License.
 #
 """ Userbot initialization. """
 
 import os
-import re
-import time
-from sys import version_info
-from logging import basicConfig, getLogger, INFO, DEBUG
 from distutils.util import strtobool as sb
 from logging import DEBUG, INFO, basicConfig, getLogger
 from pathlib import Path
-from dotenv import load_dotenv
+from sys import version_info
 
+from dotenv import load_dotenv
 from pylast import LastFMNetwork, md5
 from pySmartDL import SmartDL
-from dotenv import load_dotenv
 from requests import get
 from telethon import TelegramClient
 from telethon.sessions import StringSession
@@ -25,7 +24,6 @@ from telethon.sessions import StringSession
 from .storage import Storage
 
 STORAGE = (lambda n: Storage(Path("data") / n))
-
 
 load_dotenv("config.env")
 
