@@ -11,7 +11,7 @@ if not hasattr(STORAGE, "userObj"):
     STORAGE.userObj = False
 
 
-@register(outgoing=True, pattern=r"^\.impostor ?(.*)")
+@register(outgoing=True, pattern=r"^\.clone ?(.*)")
 async def impostor(event):
     inputArgs = event.pattern_match.group(1)
 
@@ -79,12 +79,12 @@ async def updateProfile(userObj, restore=False):
 
 
 CMD_HELP.update({
-    "impostor":
-    ">`.impostor` (as a reply to a message of a user)\
+    "clone":
+    ">`.clone` (as a reply to a message of a user)\
     \nUsage: Steals the user's identity.\
-    \n\n>`.impostor <username/ID>`\
+    \n\n>`.clone <username/ID>`\
     \nUsage: Steals the given username/ID's identity.\
-    \n\n>`.impostor restore`\
+    \n\n>`.clone restore`\
     \nUsage: Revert back to your true identity.\
     \n\n**Always restore before running it again.**\
 "
