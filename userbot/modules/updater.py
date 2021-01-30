@@ -201,7 +201,7 @@ async def upstream(event):
         else:
             await event.edit(changelog_str)
         return await event.respond(
-            '`Digite **".update deploy"** ou ".update now" para atualizar`'
+            '`Digite` **.update deploy** `ou` ".update now" `para atualizar`'
         )
 
     if force_update:
