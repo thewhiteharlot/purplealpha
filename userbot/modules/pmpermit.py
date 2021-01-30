@@ -198,17 +198,16 @@ async def notifon(non_event):
 
 @register(outgoing=True, pattern=r"^\.approve(?:$| )(.*)")
 async def approvepm(apprvpm):
-    """ Para o comando .approve, dê a alguém as permissões para enviar um PM para você. """
+    """ For .approve command, give someone the permissions to PM you. """
     try:
         from userbot.modules.sql_helper.globals import gvarstatus
         from userbot.modules.sql_helper.pm_permit_sql import approve
     except AttributeError:
-        await apprvpm.edit("**Executando em modo não-SQL!**")
-        return
+        return await apprvpm.edit("**Executando em modo não-SQL!**")
 
     if apprvpm.reply_to_msg_id:
         reply = await apprvpm.get_reply_message()
-        replied_user = await apprvpm.client.get_entity(reply.from_id)
+        replied_user = await apprvpm.client.get_entity(reply.sender_id)
         uid = replied_user.id
         name0 = str(replied_user.first_name)
 
@@ -217,7 +216,7 @@ async def approvepm(apprvpm):
         try:
             user = await apprvpm.client.get_entity(inputArgs)
         except:
-            return await apprvpm.edit("**Nome de usuário inválido/ID.**")
+            return await apprvpm.edit("**ID/Nome de usuário inválido.**")
         if not isinstance(user, User):
             return await apprvpm.edit("**Isso pode ser feito apenas com usuários.**")
         uid = user.id
@@ -225,33 +224,30 @@ async def approvepm(apprvpm):
 
     else:
         aname = await apprvpm.client.get_entity(apprvpm.chat_id)
+        if not isinstance(aname, User):
+            return await apprvpm.edit("**Isso pode ser feito apenas com usuários.**")
         name0 = str(aname.first_name)
         uid = apprvpm.chat_id
 
     # Get user custom msg
     getmsg = gvarstatus("unapproved_msg")
-    if getmsg is not None:
-        UNAPPROVED_MSG = getmsg
-    else:
-        UNAPPROVED_MSG = DEF_UNAPPROVED_MSG
-
-    async for message in apprvpm.client.iter_messages(
-        apprvpm.chat_id, from_user="me", search=UNAPPROVED_MSG
-    ):
+    UNAPPROVED_MSG = getmsg if getmsg is not None else DEF_UNAPPROVED_MSG
+    async for message in apprvpm.client.iter_messages(apprvpm.chat_id,
+                                                      from_user='me',
+                                                      search=UNAPPROVED_MSG):
         await message.delete()
 
     try:
         approve(uid)
     except IntegrityError:
-        await apprvpm.edit("`O usuário já está permitido.`")
-        return
+        return await apprvpm.edit("**O usuário já deve estar permitido.**")
 
     await apprvpm.edit(f"[{name0}](tg://user?id={uid}) **permitido de enviar PMs!**")
 
     if BOTLOG:
         await apprvpm.client.send_message(
             BOTLOG_CHATID,
-            "#APPROVED\n" + "User: " + f"[{name0}](tg://user?id={uid})",
+            "#APROVADO\n" + "Usuário: " + f"[{name0}](tg://user?id={uid})",
         )
 
 
@@ -260,12 +256,11 @@ async def disapprovepm(disapprvpm):
     try:
         from userbot.modules.sql_helper.pm_permit_sql import dissprove
     except BaseException:
-        await disapprvpm.edit("`Executando em modo não-SQL!`")
-        return
+        return await disapprvpm.edit("**Executando em modo não-SQL!**")
 
     if disapprvpm.reply_to_msg_id:
         reply = await disapprvpm.get_reply_message()
-        replied_user = await disapprvpm.client.get_entity(reply.from_id)
+        replied_user = await disapprvpm.client.get_entity(reply.sender_id)
         aname = replied_user.id
         name0 = str(replied_user.first_name)
         dissprove(aname)
@@ -275,9 +270,10 @@ async def disapprovepm(disapprvpm):
         try:
             user = await disapprvpm.client.get_entity(inputArgs)
         except:
-            return await disapprvpm.edit("**Invalid username/ID.**")
+            return await disapprvpm.edit("**ID/Nome de usuário inválido.**")
         if not isinstance(user, User):
-            return await disapprvpm.edit("**This can be done only with users.**")
+            return await disapprvpm.edit(
+                "**Isso pode ser feito apenas com usuários.**")
         aname = user.id
         dissprove(aname)
         name0 = str(user.first_name)
@@ -285,16 +281,19 @@ async def disapprovepm(disapprvpm):
     else:
         dissprove(disapprvpm.chat_id)
         aname = await disapprvpm.client.get_entity(disapprvpm.chat_id)
+        if not isinstance(aname, User):
+            return await disapprvpm.edit(
+                "**Isso pode ser feito apenas com usuários.**")
         name0 = str(aname.first_name)
 
     await disapprvpm.edit(
-        f"[{name0}](tg://user?id={aname}) **Proibido de enviar PMs!**"
-    )
+        f"[{name0}](tg://user?id={aname}) **Proibido de enviar PMs!**")
 
     if BOTLOG:
         await disapprvpm.client.send_message(
             BOTLOG_CHATID,
-            f"[{name0}](tg://user?id={aname})" " foi proibido de mandar PMs para você.",
+            f"[{name0}](tg://user?id={aname})"
+            " foi proibido de mandar PMs para você.",
         )
 
 
@@ -326,7 +325,7 @@ async def blockpm(block):
     if BOTLOG:
         await block.client.send_message(
             BOTLOG_CHATID,
-            "#BLOCKED\n" + "User: " + f"[{name0}](tg://user?id={uid})",
+            "#BLOQUEADO\n" + "Usuário: " + f"[{name0}](tg://user?id={uid})",
         )
 
 
