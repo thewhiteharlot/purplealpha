@@ -277,8 +277,7 @@ async def disapprovepm(disapprvpm):
         except:
             return await disapprvpm.edit("**Invalid username/ID.**")
         if not isinstance(user, User):
-            return await disapprvpm.edit(
-                "**This can be done only with users.**")
+            return await disapprvpm.edit("**This can be done only with users.**")
         aname = user.id
         dissprove(aname)
         name0 = str(user.first_name)
@@ -295,8 +294,7 @@ async def disapprovepm(disapprvpm):
     if BOTLOG:
         await disapprvpm.client.send_message(
             BOTLOG_CHATID,
-            f"[{name0}](tg://user?id={aname})"
-            " foi proibido de mandar PMs para você.",
+            f"[{name0}](tg://user?id={aname})" " foi proibido de mandar PMs para você.",
         )
 
 
