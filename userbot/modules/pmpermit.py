@@ -232,9 +232,9 @@ async def approvepm(apprvpm):
     # Get user custom msg
     getmsg = gvarstatus("unapproved_msg")
     UNAPPROVED_MSG = getmsg if getmsg is not None else DEF_UNAPPROVED_MSG
-    async for message in apprvpm.client.iter_messages(apprvpm.chat_id,
-                                                      from_user='me',
-                                                      search=UNAPPROVED_MSG):
+    async for message in apprvpm.client.iter_messages(
+        apprvpm.chat_id, from_user="me", search=UNAPPROVED_MSG
+    ):
         await message.delete()
 
     try:
@@ -272,8 +272,7 @@ async def disapprovepm(disapprvpm):
         except:
             return await disapprvpm.edit("**ID/Nome de usuário inválido.**")
         if not isinstance(user, User):
-            return await disapprvpm.edit(
-                "**Isso pode ser feito apenas com usuários.**")
+            return await disapprvpm.edit("**Isso pode ser feito apenas com usuários.**")
         aname = user.id
         dissprove(aname)
         name0 = str(user.first_name)
@@ -282,18 +281,17 @@ async def disapprovepm(disapprvpm):
         dissprove(disapprvpm.chat_id)
         aname = await disapprvpm.client.get_entity(disapprvpm.chat_id)
         if not isinstance(aname, User):
-            return await disapprvpm.edit(
-                "**Isso pode ser feito apenas com usuários.**")
+            return await disapprvpm.edit("**Isso pode ser feito apenas com usuários.**")
         name0 = str(aname.first_name)
 
     await disapprvpm.edit(
-        f"[{name0}](tg://user?id={aname}) **Proibido de enviar PMs!**")
+        f"[{name0}](tg://user?id={aname}) **Proibido de enviar PMs!**"
+    )
 
     if BOTLOG:
         await disapprvpm.client.send_message(
             BOTLOG_CHATID,
-            f"[{name0}](tg://user?id={aname})"
-            " foi proibido de mandar PMs para você.",
+            f"[{name0}](tg://user?id={aname})" " foi proibido de mandar PMs para você.",
         )
 
 
