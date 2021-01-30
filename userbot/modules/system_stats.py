@@ -235,7 +235,7 @@ async def amireallyalive(alive):
         f"•  🐍 `Python     : v{python_version()} `\n"
         f"•  👤 `Usuário    :`  {DEFAULTUSER} \n"
         "`-----------------------------`\n"
-        f"•  💻 `Rodando em : {repo.active_branch.name} `\n"
+        f"•  💻 `Rodando em : Alpha `\n"
         f"•  🗃 `Módulos    : {len(modules)} `\n"
         f"•  👾 `PurpleBot  : v{USERBOT_VERSION} `\n"
         f"•  🕒 `Bot Uptime : {uptime} `\n"
