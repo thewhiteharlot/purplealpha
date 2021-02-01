@@ -23,7 +23,6 @@ from userbot.events import register
 
 # ========================= CONSTANTS ============================
 DEF_UNAPPROVED_MSG = (
-
     "Ei! Desculpe, eu não aprovei você para mensagens privadas ainda.\n"
     "Por favor espere que eu permita.\n"
     "Até lá, não spamme meu PM...\n"
@@ -304,13 +303,10 @@ async def disapprovepm(disapprvpm):
         f"[{name0}](tg://user?id={aname}) **Proibido de enviar PMs!**"
     )
 
-
     if BOTLOG:
         await disapprvpm.client.send_message(
             BOTLOG_CHATID,
-
             f"[{name0}](tg://user?id={aname})" " foi proibido de mandar PMs para você.",
-
         )
 
 
@@ -359,9 +355,7 @@ async def unblockpm(unblock):
     if BOTLOG:
         await unblock.client.send_message(
             BOTLOG_CHATID,
-
             f"[{name0}](tg://user?id={replied_user.id})" " foi desbloqueado!.",
-
         )
 
 
@@ -405,7 +399,6 @@ async def add_pmsg(cust_msg):
 
         if BOTLOG:
             await cust_msg.client.send_message(
-
                 BOTLOG_CHATID,
                 f"***{status} Mensagem não aprovada automática :*** \n\n{msg}",
             )
@@ -429,13 +422,11 @@ async def add_pmsg(cust_msg):
             await cust_msg.edit(
                 "*Você ainda não definiu Mensagem não aprovada automática*\n"
                 f"Usando mensagem padrão: \n\n`{DEF_UNAPPROVED_MSG}`"
-
             )
 
 
 CMD_HELP.update(
     {
-
         "pmpermit": "\
 .approve\
 \nUso: Aprova a pessoa mencionada/respondida a enviar PMs.\
@@ -458,6 +449,5 @@ CMD_HELP.update(
 \n\n*A mensagem não aprovada personalizada atualmente não pode ser definida\
 \ntexto formatado como negrito, sublinhado, link, etc..\
 \nA mensagem será enviada apenas em monoscape"
-
     }
 )
