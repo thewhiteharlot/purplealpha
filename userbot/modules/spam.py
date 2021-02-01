@@ -11,7 +11,7 @@ from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
 from userbot.events import register
 
 
-@register(outgoing=True, pattern="^.cspam (.*)")
+@register(outgoing=True, pattern=r"^\.cspam (.+)")
 async def leter_spam(cspammer):
     cspam = str(cspammer.pattern_match.group(1))
     message = cspam.replace(" ", "")
@@ -24,7 +24,7 @@ async def leter_spam(cspammer):
         )
 
 
-@register(outgoing=True, pattern="^.wspam (.*)")
+@register(outgoing=True, pattern=r"^\.wspam (.+)")
 async def word_spam(wspammer):
     wspam = str(wspammer.pattern_match.group(1))
     message = wspam.split()
@@ -37,10 +37,10 @@ async def word_spam(wspammer):
         )
 
 
-@register(outgoing=True, pattern="^.spam (.*)")
+@register(outgoing=True, pattern=r"^\.spam (\d+) (.+)")
 async def spammer(spamm):
-    counter = int(spamm.pattern_match.group(1).split(" ", 1)[0])
-    spam_message = str(spamm.pattern_match.group(1).split(" ", 1)[1])
+    counter = int(e.pattern_match.group(1))
+    spam_message = str(e.pattern_match.group(2))
     await spamm.delete()
     await asyncio.wait([spamm.respond(spam_message) for i in range(counter)])
     if BOTLOG:
@@ -49,12 +49,10 @@ async def spammer(spamm):
         )
 
 
-@register(outgoing=True, pattern="^.picspam")
+@register(outgoing=True, pattern=r"^\.picspam (\d+) (.+)")
 async def tiny_pic_spam(pspam):
-    message = pspam.text
-    text = message.split()
-    counter = int(text[1])
-    link = str(text[2])
+    counter = int(e.pattern_match.group(1))
+    link = str(e.pattern_match.group(2))
     await pspam.delete()
     for _ in range(1, counter):
         await pspam.client.send_file(pspam.chat_id, link)
@@ -64,11 +62,11 @@ async def tiny_pic_spam(pspam):
         )
 
 
-@register(outgoing=True, pattern="^.delayspam (.*)")
+@register(outgoing=True, pattern=r"^\.delayspam (\d+) (\d+) (.+)")
 async def dspammer(dspam):
-    spamDelay = float(dspam.pattern_match.group(1).split(" ", 2)[0])
-    counter = int(dspam.pattern_match.group(1).split(" ", 2)[1])
-    spam_message = str(dspam.pattern_match.group(1).split(" ", 2)[2])
+    spamDelay = float(e.pattern_match.group(1))
+    counter = int(e.pattern_match.group(2))
+    spam_message = str(e.pattern_match.group(3))
     await dspam.delete()
     for _ in range(1, counter):
         await dspam.respond(spam_message)
@@ -84,13 +82,13 @@ CMD_HELP.update(
         "spam": ".cspam <texto>\
 \nUso: Spamma o texto letra por letra.\
 \n\n.spam <número> <texto>\
-\nUso: Spamma texto no chat !!\
+\nUso: Spamma texto no chat!\
 \n\n.wspam <texto>\
 \nUso: Spamma texto no chat, letra por letra.\
 \n\n.picspam <número> <link para imagem/gif>\
 \nUso: Como se o spam de texto não fosse suficiente !!\
 \n\n.delayspam <atraso> <número> <texto>\
-\nUso: .bigspam, mas com atraso personalizado.\
-\n\n\nNOTA: Spamme por sua própria conta e risco !!"
+\nUso: .spam, mas com atraso personalizado.\
+\n\n\n**NOTA: Spamme por sua própria conta e risco!!**"
     }
 )

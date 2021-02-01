@@ -214,6 +214,12 @@ async def approvepm(apprvpm):
 
     elif apprvpm.pattern_match.group(1):
         inputArgs = apprvpm.pattern_match.group(1)
+
+        try:
+            inputArgs = int(inputArgs)
+        except ValueError:
+            pass
+
         try:
             user = await apprvpm.client.get_entity(inputArgs)
         except:
@@ -268,6 +274,12 @@ async def disapprovepm(disapprvpm):
 
     elif disapprvpm.pattern_match.group(1):
         inputArgs = disapprvpm.pattern_match.group(1)
+
+        try:
+            inputArgs = int(inputArgs)
+        except ValueError:
+            pass
+
         try:
             user = await disapprvpm.client.get_entity(inputArgs)
         except:
