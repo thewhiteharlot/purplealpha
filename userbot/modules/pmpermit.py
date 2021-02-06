@@ -198,7 +198,7 @@ async def notifon(non_event):
 
 @register(outgoing=True, pattern=r"^\.approve(?:$| )(.*)")
 async def approvepm(apprvpm):
-    """ For .approve command, give someone the permissions to PM you. """
+    """ Para o comando .approve, dê a alguém as permissões para enviar um PM para você. """
     try:
         from userbot.modules.sql_helper.globals import gvarstatus
         from userbot.modules.sql_helper.pm_permit_sql import approve
