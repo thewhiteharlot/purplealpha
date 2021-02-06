@@ -2384,7 +2384,7 @@ async def tghack(event):
     if event.fwd_from:
         return
     animation_interval = 2
-    animation_ttl = range(0, 16)
+    animation_ttl = range(0, 21)
     animation_chars = [
         "```Conectando ao Servidor \\```",
         "```Conectando ao Servidor |```",
@@ -2410,7 +2410,7 @@ async def tghack(event):
     ]
     for i in animation_ttl:
         await sleep(animation_interval)
-        await event.edit(animation_chars[i % 16])
+        await event.edit(animation_chars[i % 21])
 
 
 # Author: @Jisan7509
