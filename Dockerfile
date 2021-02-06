@@ -1,4 +1,4 @@
-FROM kenhv/kensurbot:alpine
+FROM sahyam/docker:groovy
 
 RUN git clone -b purplealpha https://github.com/thewhiteharlot/purplealpha /root/userbot
 RUN chmod 777 /root/userbot
