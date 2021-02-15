@@ -55,11 +55,7 @@ async def permitpm(event):
 
         # Use user custom unapproved message
         getmsg = gvarstatus("unapproved_msg")
-        if getmsg is not None:
-            UNAPPROVED_MSG = getmsg
-        else:
-            UNAPPROVED_MSG = DEF_UNAPPROVED_MSG
-
+        UNAPPROVED_MSG = getmsg if getmsg is not None else DEF_UNAPPROVED_MSG
         # This part basically is a sanity check
         # If the message that sent before is Unapproved Message
         # then stop sending it again to prevent FloodHit
@@ -140,11 +136,7 @@ async def auto_accept(event):
 
         # Use user custom unapproved message
         get_message = gvarstatus("unapproved_msg")
-        if get_message is not None:
-            UNAPPROVED_MSG = get_message
-        else:
-            UNAPPROVED_MSG = DEF_UNAPPROVED_MSG
-
+        UNAPPROVED_MSG = get_message if get_message is not None else DEF_UNAPPROVED_MSG
         chat = await event.get_chat()
         if isinstance(chat, User):
             if is_approved(event.chat_id) or chat.bot:
@@ -386,15 +378,14 @@ async def add_pmsg(cust_msg):
             sql.delgvar("unapproved_msg")
             status = "Updated"
 
-        if message:
-            # TODO: allow user to have a custom text formatting
-            # eg: bold, underline, striketrough, link
-            # for now all text are in monoscape
-            msg = message.message  # get the plain text
-            sql.addgvar("unapproved_msg", msg)
-        else:
+        if not message:
             return await cust_msg.edit("`Responda a uma mensagem`")
 
+        # TODO: allow user to have a custom text formatting
+        # eg: bold, underline, striketrough, link
+        # for now all text are in monoscape
+        msg = message.message  # get the plain text
+        sql.addgvar("unapproved_msg", msg)
         await cust_msg.edit("`Mensagem salva como Mensagem não aprovada automática`")
 
         if BOTLOG:
@@ -404,14 +395,14 @@ async def add_pmsg(cust_msg):
             )
 
     if conf.lower() == "reset":
-        if custom_message is not None:
+        if custom_message is None:
+            await cust_msg.edit("`Você ainda não definiu uma mensagem personalizada`")
+
+        else:
             sql.delgvar("unapproved_msg")
             await cust_msg.edit(
                 "`Mensagem não aprovada automática redefinida para o padrão`"
             )
-        else:
-            await cust_msg.edit("`Você ainda não definiu uma mensagem personalizada`")
-
     if conf.lower() == "get":
         if custom_message is not None:
             await cust_msg.edit(

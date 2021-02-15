@@ -27,7 +27,7 @@ async def f_load(event):
     number = number + 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ▊")
-    number = number + 1
+    number += 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ▉")
     number = number + 1
@@ -36,31 +36,31 @@ async def f_load(event):
     number = number + 1
     await sleep(0.03)
     await event.edit(str(number) + "%   █▎")
-    number = number + 1
+    number += 1
     await sleep(0.03)
     await event.edit(str(number) + "%   █▍")
-    number = number + 1
+    number += 1
     await sleep(0.03)
     await event.edit(str(number) + "%   █▌")
-    number = number + 1
+    number += 1
     await sleep(0.03)
     await event.edit(str(number) + "%   █▊")
     number = number + 1
     await sleep(0.03)
     await event.edit(str(number) + "%   █▉")
-    number = number + 1
+    number += 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ██")
     number = number + 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ██▎")
-    number = number + 1
+    number += 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ██▍")
     number = number + 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ██▌")
-    number = number + 1
+    number += 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ██▊")
     number = number + 1
@@ -69,10 +69,10 @@ async def f_load(event):
     number = number + 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ███")
-    number = number + 1
+    number += 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ███▎")
-    number = number + 1
+    number += 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ███▍")
     number = number + 1
@@ -81,13 +81,13 @@ async def f_load(event):
     number = number + 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ███▊")
-    number = number + 1
+    number += 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ███▉")
-    number = number + 1
+    number += 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ████")
-    number = number + 1
+    number += 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ████▎")
     number = number + 1
@@ -96,10 +96,10 @@ async def f_load(event):
     number = number + 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ████▌")
-    number = number + 1
+    number += 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ████▊")
-    number = number + 1
+    number += 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ████▉")
     number = number + 1
@@ -108,7 +108,7 @@ async def f_load(event):
     number = number + 1
     await sleep(0.03)
     await event.edit(str(number) + "%   █████▎")
-    number = number + 1
+    number += 1
     await sleep(0.03)
     await event.edit(str(number) + "%   █████▍")
     number = number + 1
@@ -129,13 +129,13 @@ async def f_load(event):
     number = number + 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ██████▍")
-    number = number + 1
+    number += 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ██████▌")
     number = number + 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ██████▊")
-    number = number + 1
+    number += 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ██████▉")
     number = number + 1
@@ -147,13 +147,13 @@ async def f_load(event):
     number = number + 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ███████▍")
-    number = number + 1
+    number += 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ███████▌")
-    number = number + 1
+    number += 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ███████▊")
-    number = number + 1
+    number += 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ███████▉")
     number = number + 1
@@ -162,16 +162,16 @@ async def f_load(event):
     number = number + 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ████████▎")
-    number = number + 1
+    number += 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ████████▍")
-    number = number + 1
+    number += 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ████████▌")
     number = number + 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ████████▊")
-    number = number + 1
+    number += 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ████████▉")
     number = number + 1
@@ -189,58 +189,58 @@ async def f_load(event):
     number = number + 1
     await sleep(0.03)
     await event.edit(str(number) + "%   █████████▊")
-    number = number + 1
+    number += 1
     await sleep(0.03)
     await event.edit(str(number) + "%   █████████▉")
     number = number + 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ██████████")
-    number = number + 1
+    number += 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ██████████▎")
-    number = number + 1
+    number += 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ██████████▍")
     number = number + 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ██████████▌")
-    number = number + 1
+    number += 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ██████████▊")
-    number = number + 1
+    number += 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ██████████▉")
     number = number + 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ███████████")
-    number = number + 1
+    number += 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ███████████▎")
-    number = number + 1
+    number += 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ███████████▍")
     number = number + 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ███████████▌")
-    number = number + 1
+    number += 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ███████████▊")
     number = number + 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ███████████▉")
-    number = number + 1
+    number += 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ████████████")
     number = number + 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ████████████▎")
-    number = number + 1
+    number += 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ████████████▍")
     number = number + 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ████████████▌")
-    number = number + 1
+    number += 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ████████████▊")
     number = number + 1
@@ -249,10 +249,10 @@ async def f_load(event):
     number = number + 1
     await sleep(0.03)
     await event.edit(str(number) + "%   █████████████")
-    number = number + 1
+    number += 1
     await sleep(0.03)
     await event.edit(str(number) + "%   █████████████▎")
-    number = number + 1
+    number += 1
     await sleep(0.03)
     await event.edit(str(number) + "%   █████████████▍")
     number = number + 1
@@ -261,13 +261,13 @@ async def f_load(event):
     number = number + 1
     await sleep(0.03)
     await event.edit(str(number) + "%   █████████████▊")
-    number = number + 1
+    number += 1
     await sleep(0.03)
     await event.edit(str(number) + "%   █████████████▉")
-    number = number + 1
+    number += 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ██████████████")
-    number = number + 1
+    number += 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ██████████████▎")
     number = number + 1
@@ -276,7 +276,7 @@ async def f_load(event):
     number = number + 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ██████████████▌")
-    number = number + 1
+    number += 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ██████████████▊")
     number = number + 1
@@ -288,7 +288,7 @@ async def f_load(event):
     number = number + 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ███████████████▎")
-    number = number + 1
+    number += 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ███████████████▍")
     number = number + 1
@@ -297,13 +297,13 @@ async def f_load(event):
     number = number + 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ███████████████▊")
-    number = number + 1
+    number += 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ███████████████▉")
-    number = number + 1
+    number += 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ████████████████")
-    number = number + 1
+    number += 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ████████████████▎")
     number = number + 1
@@ -312,7 +312,7 @@ async def f_load(event):
     number = number + 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ████████████████▌")
-    number = number + 1
+    number += 1
     await sleep(0.03)
     await event.edit(str(number) + "%   ████████████████▌\n`Carregamento completado!`")
 

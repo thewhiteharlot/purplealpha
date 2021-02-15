@@ -155,44 +155,47 @@ async def mention_afk(mention):
     back_alivee = datetime.now()
     afk_end = back_alivee.replace(microsecond=0)
     afk_since = "algum tempo atrás"
-    if mention.message.mentioned and not (await mention.get_sender()).bot:
-        if ISAFK:
-            now = datetime.now()
-            datime_since_afk = now - afk_time  # pylint:disable=E0602
-            time = float(datime_since_afk.seconds)
-            days = time // (24 * 3600)
-            time = time % (24 * 3600)
-            hours = time // 3600
-            time %= 3600
-            minutes = time // 60
-            time %= 60
-            seconds = time
-            if days == 1:
-                afk_since = "Ontem"
-            elif days > 1:
-                if days > 6:
-                    date = now + datetime.timedelta(
-                        days=-days, hours=-hours, minutes=-minutes
-                    )
-                    afk_since = date.strftime("%A, %Y %B %m, %H:%I")
-                else:
-                    wday = now + datetime.timedelta(days=-days)
-                    afk_since = wday.strftime("%A")
-            elif hours > 1:
-                afk_since = f"`{int(hours)}h{int(minutes)}m`"
-            elif minutes > 0:
-                afk_since = f"`{int(minutes)}m{int(seconds)}s`"
-            else:
-                afk_since = f"`{int(seconds)}s`"
-            if AFKREASON:
-                await mention.reply(
-                    f"Estou ausente fazem {afk_since}.\
-                    \nRazão: `{AFKREASON}`"
+    if (
+        mention.message.mentioned
+        and not (await mention.get_sender()).bot
+        and ISAFK
+    ):
+        now = datetime.now()
+        datime_since_afk = now - afk_time  # pylint:disable=E0602
+        time = float(datime_since_afk.seconds)
+        days = time // (24 * 3600)
+        time %= 24 * 3600
+        hours = time // 3600
+        time %= 3600
+        minutes = time // 60
+        time %= 60
+        seconds = time
+        if days == 1:
+            afk_since = "Ontem"
+        elif days > 1:
+            if days > 6:
+                date = now + datetime.timedelta(
+                    days=-days, hours=-hours, minutes=-minutes
                 )
+                afk_since = date.strftime("%A, %Y %B %m, %H:%I")
             else:
-                await mention.reply(str(choice(AFKSTR)))
-            USERS.update({mention.sender_id: 1})
-            COUNT_MSG = COUNT_MSG + 1
+                wday = now + datetime.timedelta(days=-days)
+                afk_since = wday.strftime("%A")
+        elif hours > 1:
+            afk_since = f"`{int(hours)}h{int(minutes)}m`"
+        elif minutes > 0:
+            afk_since = f"`{int(minutes)}m{int(seconds)}s`"
+        else:
+            afk_since = f"`{int(seconds)}s`"
+        if AFKREASON:
+            await mention.reply(
+                f"Estou ausente fazem {afk_since}.\
+                    \nRazão: `{AFKREASON}`"
+            )
+        else:
+            await mention.reply(str(choice(AFKSTR)))
+        USERS.update({mention.sender_id: 1})
+        COUNT_MSG = COUNT_MSG + 1
 
 
 @register(incoming=True, disable_errors=True)
@@ -230,7 +233,7 @@ async def afk_on_pm(sender):
             datime_since_afk = now - afk_time  # pylint:disable=E0602
             time = float(datime_since_afk.seconds)
             days = time // (24 * 3600)
-            time = time % (24 * 3600)
+            time %= 24 * 3600
             hours = time // 3600
             time %= 3600
             minutes = time // 60
