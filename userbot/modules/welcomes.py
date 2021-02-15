@@ -31,36 +31,31 @@ async def welcome_to_chat(event):
             chat = await event.get_chat()
             me = await event.client.get_me()
 
-            title = chat.title if chat.title else "Este chat"
+            title = chat.title or "Este chat"
             participants = await event.client.get_participants(chat)
             count = len(participants)
             mention = "[{}](tg://user?id={})".format(a_user.first_name, a_user.id)
             my_mention = "[{}](tg://user?id={})".format(me.first_name, me.id)
             first = a_user.first_name
             last = a_user.last_name
-            if last:
-                fullname = f"{first} {last}"
-            else:
-                fullname = first
+            fullname = f"{first} {last}" if last else first
             username = f"@{a_user.username}" if a_user.username else mention
             userid = a_user.id
             my_first = me.first_name
             my_last = me.last_name
-            if my_last:
-                my_fullname = f"{my_first} {my_last}"
-            else:
-                my_fullname = my_first
+            my_fullname = f"{my_first} {my_last}" if my_last else my_first
             my_username = f"@{me.username}" if me.username else my_mention
             file_media = None
             current_saved_welcome_message = None
-            if cws and cws.f_mesg_id:
-                msg_o = await event.client.get_messages(
-                    entity=BOTLOG_CHATID, ids=int(cws.f_mesg_id)
-                )
-                file_media = msg_o.media
-                current_saved_welcome_message = msg_o.message
-            elif cws and cws.reply:
-                current_saved_welcome_message = cws.reply
+            if cws:
+                if cws.f_mesg_id:
+                    msg_o = await event.client.get_messages(
+                        entity=BOTLOG_CHATID, ids=int(cws.f_mesg_id)
+                    )
+                    file_media = msg_o.media
+                    current_saved_welcome_message = msg_o.message
+                elif cws.reply:
+                    current_saved_welcome_message = cws.reply
             current_message = await event.reply(
                 current_saved_welcome_message.format(
                     mention=mention,
@@ -130,7 +125,7 @@ async def show_welcome(event):
     if not cws:
         await event.edit("`Nenhuma mensagem de boas-vindas salva aqui.`")
         return
-    elif cws and cws.f_mesg_id:
+    elif cws.f_mesg_id:
         msg_o = await event.client.get_messages(
             entity=BOTLOG_CHATID, ids=int(cws.f_mesg_id)
         )
@@ -138,7 +133,7 @@ async def show_welcome(event):
             "`Atualmente, estou dando as boas-vindas a novos usuários com esta nota de boas-vindas.`"
         )
         await event.reply(msg_o.message, file=msg_o.media)
-    elif cws and cws.reply:
+    elif cws.reply:
         await event.edit(
             "`Atualmente, estou dando as boas-vindas a novos usuários com esta nota de boas-vindas.`"
         )

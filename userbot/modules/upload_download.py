@@ -39,10 +39,9 @@ async def download(target_file):
         # https://stackoverflow.com/a/761825/4723940
         file_name = file_name.strip()
         head, tail = os.path.split(file_name)
-        if head:
-            if not os.path.isdir(os.path.join(TEMP_DOWNLOAD_DIRECTORY, head)):
-                os.makedirs(os.path.join(TEMP_DOWNLOAD_DIRECTORY, head))
-                file_name = os.path.join(head, tail)
+        if head and not os.path.isdir(os.path.join(TEMP_DOWNLOAD_DIRECTORY, head)):
+            os.makedirs(os.path.join(TEMP_DOWNLOAD_DIRECTORY, head))
+            file_name = os.path.join(head, tail)
         downloaded_file_name = TEMP_DOWNLOAD_DIRECTORY + "/" + file_name
         downloader = SmartDL(url, downloaded_file_name, progress_bar=False)
         downloader.start(blocking=False)
@@ -50,17 +49,18 @@ async def download(target_file):
         display_message = None
         while not downloader.isFinished():
             status = downloader.get_status().capitalize()
-            total_length = downloader.filesize if downloader.filesize else None
+            total_length = downloader.filesize or None
             downloaded = downloader.get_dl_size()
             now = time.time()
             diff = now - c_time
             percentage = downloader.get_progress() * 100
             speed = downloader.get_speed()
             progress_str = "[{0}{1}] `{2}%`".format(
-                "".join(["■" for i in range(math.floor(percentage / 10))]),
-                "".join(["▨" for i in range(10 - math.floor(percentage / 10))]),
+                "".join("■" for i in range(math.floor(percentage / 10))),
+                "".join("▨" for i in range(10 - math.floor(percentage / 10))),
                 round(percentage, 2),
             )
+
             estimated_total_time = downloader.get_eta(human=True)
             try:
                 current_message = (
@@ -176,7 +176,7 @@ async def uploadir(udir_event):
                         ),
                     )
                 os.remove(single_file)
-                uploaded = uploaded + 1
+                uploaded += 1
         await udir_event.edit("Enviados {} arquivos com sucesso !!".format(uploaded))
     else:
         await udir_event.edit("404: Directory Not Found")
@@ -266,12 +266,12 @@ async def uploadas(uas_event):
     supports_streaming = False
     round_message = False
     spam_big_messages = False
-    if type_of_upload == "stream":
-        supports_streaming = True
-    if type_of_upload == "vn":
-        round_message = True
     if type_of_upload == "all":
         spam_big_messages = True
+    elif type_of_upload == "stream":
+        supports_streaming = True
+    elif type_of_upload == "vn":
+        round_message = True
     input_str = uas_event.pattern_match.group(2)
     thumb = None
     file_name = None
