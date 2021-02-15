@@ -114,7 +114,8 @@ async def okgoogle(img):
             f"**Melhor resultado:** `{guess}`\
                               \n\n[Imagens visualmente semelhantes]({fetchUrl})\
                               \n\n[Resultados para {guess}]({imgspage})\
-                              \n\n**Erro:** `{e}`**.**")
+                              \n\n**Erro:** `{e}`**.**"
+        )
 
     lst = paths[0][guess]
     await img.client.send_file(
@@ -128,6 +129,7 @@ async def okgoogle(img):
                    \n\n[Resultados para {guess}]({imgspage})"
     )
     shutil.rmtree(os.path.dirname(os.path.abspath(lst[0])))
+
 
 async def ParseSauce(googleurl):
     """Parse/Scrape the HTML code for the info we want."""
