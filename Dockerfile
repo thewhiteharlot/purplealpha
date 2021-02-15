@@ -1,4 +1,4 @@
-FROM kenhv/kensurbot:alpine
+FROM movecrew/one4ubot:alpine-latest
 
 RUN git clone -b purplealpha https://github.com/thewhiteharlot/purplealpha /root/userbot
 RUN chmod 777 /root/userbot
