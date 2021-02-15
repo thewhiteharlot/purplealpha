@@ -25,15 +25,14 @@ from telethon.sessions import StringSession
 
 from .storage import Storage
 
-STORAGE = (lambda n: Storage(Path("data") / n))
+STORAGE = lambda n: Storage(Path("data") / n)
 
 load_dotenv("config.env")
 
 StartTime = time.time()
 
 # Bot Logs setup:
-CONSOLE_LOGGER_VERBOSE = sb(
-    os.environ.get("CONSOLE_LOGGER_VERBOSE") or "False")
+CONSOLE_LOGGER_VERBOSE = sb(os.environ.get("CONSOLE_LOGGER_VERBOSE") or "False")
 
 if CONSOLE_LOGGER_VERBOSE:
     basicConfig(
@@ -41,24 +40,27 @@ if CONSOLE_LOGGER_VERBOSE:
         level=DEBUG,
     )
 else:
-    basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-                level=INFO)
+    basicConfig(
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=INFO
+    )
 LOGS = getLogger(__name__)
 
 if version_info[0] < 3 or version_info[1] < 8:
-    LOGS.info("You MUST have a python version of at least 3.8."
-              "Multiple features depend on this. Bot quitting.")
+    LOGS.info(
+        "Você DEVE ter uma versão python de pelo menos 3.8."
+        "Vários recursos dependem disso. Finalizando serviços."
+    )
     quit(1)
 
 # Check if the config was edited by using the already used variable.
 # Basically, its the 'virginity check' for the config file ;)
 CONFIG_CHECK = (
-    os.environ.get("___________PLOX_______REMOVE_____THIS_____LINE__________")
-    or None)
+    os.environ.get("___________REMOVA__ISSO___________") or None
+)
 
 if CONFIG_CHECK:
     LOGS.info(
-        "Please remove the line mentioned in the first hashtag from the config.env file"
+        "Remova a linha mencionada na primeira hashtag do arquivo config.env"
     )
     quit(1)
 
@@ -179,8 +181,7 @@ G_DRIVE_CLIENT_ID = os.environ.get("G_DRIVE_CLIENT_ID") or None
 G_DRIVE_CLIENT_SECRET = os.environ.get("G_DRIVE_CLIENT_SECRET") or None
 G_DRIVE_AUTH_TOKEN_DATA = os.environ.get("G_DRIVE_AUTH_TOKEN_DATA") or None
 G_DRIVE_FOLDER_ID = os.environ.get("G_DRIVE_FOLDER_ID") or None
-TEMP_DOWNLOAD_DIRECTORY = os.environ.get(
-    "TMP_DOWNLOAD_DIRECTORY") or "./downloads/"
+TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY") or "./downloads/"
 
 # Terminal Alias
 TERM_ALIAS = os.environ.get("TERM_ALIAS") or None
@@ -233,7 +234,8 @@ async def check_botlog_chatid():
     if entity.default_banned_rights.send_messages:
         LOGS.info(
             "Your account doesn't have rights to send messages to BOTLOG_CHATID "
-            "group. Check if you typed the Chat ID correctly.")
+            "group. Check if you typed the Chat ID correctly."
+        )
         quit(1)
 
 
@@ -243,7 +245,8 @@ with bot:
     except BaseException:
         LOGS.info(
             "BOTLOG_CHATID environment variable isn't a "
-            "valid entity. Check your environment variables/config.env file.")
+            "valid entity. Check your environment variables/config.env file."
+        )
         quit(1)
 
 # Global Variables
