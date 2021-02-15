@@ -6,6 +6,6 @@ WORKDIR /root/userbot/
 
 EXPOSE 80 443
 
-RUN pip3 install  -r https://raw.githubusercontent.com/thewhiteharlot/purplealpha/purplealpha/requirements.txt --upgrade pip
+RUN pip3 install  -r https://raw.githubusercontent.com/thewhiteharlot/purplealpha/purplealpha/requirements.txt
 
 CMD ["python3","-m","userbot"]
