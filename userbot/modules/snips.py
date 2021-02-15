@@ -27,7 +27,10 @@ async def on_snip(event):
                 entity=BOTLOG_CHATID, ids=int(snip.f_mesg_id)
             )
             await event.client.send_message(
-                event.chat_id, msg_o.message, reply_to=message_id_to_reply, file=msg_o.media
+                event.chat_id,
+                msg_o.message,
+                reply_to=message_id_to_reply,
+                file=msg_o.media,
             )
         elif snip.reply:
             await event.client.send_message(

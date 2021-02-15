@@ -469,13 +469,8 @@ async def download_gdrive(gdrive, service, uri):
                     speed = round(downloaded / diff, 2)
                     eta = round((file_size - downloaded) / speed)
                     prog_str = "`Baixando` | [{0}{1}] `{2}%`".format(
-                        "".join(
-                            "■" for i in range(math.floor(percentage / 10))
-                        ),
-                        "".join(
-                            "▨"
-                            for i in range(10 - math.floor(percentage / 10))
-                        ),
+                        "".join("■" for i in range(math.floor(percentage / 10))),
+                        "".join("▨" for i in range(10 - math.floor(percentage / 10))),
                         round(percentage, 2),
                     )
 
@@ -1239,9 +1234,7 @@ async def check_progress_for_dl(gdrive, gid, previous):
                 downloaded = percentage * int(file.total_length) / 100
                 prog_str = "`Baixando` | [{0}{1}] `{2}`".format(
                     "".join("■" for i in range(math.floor(percentage / 10))),
-                    "".join(
-                        "▨" for i in range(10 - math.floor(percentage / 10))
-                    ),
+                    "".join("▨" for i in range(10 - math.floor(percentage / 10))),
                     file.progress_string(),
                 )
 
