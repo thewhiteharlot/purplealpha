@@ -110,25 +110,37 @@ async def carbon_api(e):
     await e.delete()  # Deleting msg
 
 
-@register(outgoing=True, pattern="^.img (.*)")
+@register(outgoing=True, pattern=r"^\.img(?: |$)(\d*)? ?(.*)")
 async def img_sampler(event):
-    """ Para o comando .img, pesquisa e retorna imagens que correspondam à consulta. """
-    await event.edit("`Processando...`")
-    query = event.pattern_match.group(1)
-    lim = findall(r"lim=\d+", query)
-    try:
-        lim = lim[0]
-        lim = lim.replace("lim=", "")
-        query = query.replace("lim=" + lim[0], "")
-    except IndexError:
-        lim = 8
+    """ For .img command, search and return images matching the query. """
+
+    if event.is_reply and not event.pattern_match.group(2):
+        query = await event.get_reply_message()
+        query = str(query.message)
+    else:
+        query = str(event.pattern_match.group(2))
+
+    if not query:
+        return await event.edit("**Responda a uma mensagem ou passe uma consulta para pesquisar!**")
+
+    await event.edit("**Processando...**")
+
+    if event.pattern_match.group(1) != "":
+        counter = int(event.pattern_match.group(1))
+        if counter > 10:
+            counter = int(10)
+        if counter <= 0:
+            counter = int(1)
+    else:
+        counter = int(3)
+
     response = googleimagesdownload()
 
     # creating list of arguments
     arguments = {
         "keywords": query,
-        "limit": lim,
-        "format": "jpg",
+        "limit": counter,
+        "format": "png",
         "no_directory": "no_directory",
     }
 
@@ -137,7 +149,7 @@ async def img_sampler(event):
     try:
         paths = response.download(arguments)
     except Exception as e:
-        return await event.edit(f"`Error: {e}`")
+        return await event.edit(f"**Erro:** `{e}`")
 
     lst = paths[0][query]
     await event.client.send_file(
