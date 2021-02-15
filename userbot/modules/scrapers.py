@@ -121,7 +121,9 @@ async def img_sampler(event):
         query = str(event.pattern_match.group(2))
 
     if not query:
-        return await event.edit("**Responda a uma mensagem ou passe uma consulta para pesquisar!**")
+        return await event.edit(
+            "**Responda a uma mensagem ou passe uma consulta para pesquisar!**"
+        )
 
     await event.edit("**Processando...**")
 
