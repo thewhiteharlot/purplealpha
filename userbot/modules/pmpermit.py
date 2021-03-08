@@ -1,6 +1,6 @@
 # Copyright (C) 2019 The Raphielscape Company LLC.
 #
-# Licensed under the Raphielscape Public License, Version 1.d (the "License");
+# Licensed under the Raphielscape Public License, Version 1.c (the "License");
 # you may not use this file except in compliance with the License.
 #
 """ Userbot module for keeping control who PM you. """
@@ -23,11 +23,8 @@ from userbot.events import register
 
 # ========================= CONSTANTS ============================
 DEF_UNAPPROVED_MSG = (
-    "Ei! Desculpe, eu não aprovei você para mensagens privadas ainda.\n"
-    "Por favor espere que eu permita.\n"
-    "Até lá, não spamme meu PM...\n"
-    "Obrigado pela paciência.\n\n"
-    "*Está é uma mensagem automática."
+    "Hey there! Unfortunately, I don't accept private messages from strangers.\n"
+    "Please contact me in a group, or wait for me to approve you."
 )
 # =================================================================
 
@@ -55,11 +52,7 @@ async def permitpm(event):
 
         # Use user custom unapproved message
         getmsg = gvarstatus("unapproved_msg")
-        if getmsg is not None:
-            UNAPPROVED_MSG = getmsg
-        else:
-            UNAPPROVED_MSG = DEF_UNAPPROVED_MSG
-
+        UNAPPROVED_MSG = getmsg if getmsg is not None else DEF_UNAPPROVED_MSG
         # This part basically is a sanity check
         # If the message that sent before is Unapproved Message
         # then stop sending it again to prevent FloodHit
@@ -86,9 +79,8 @@ async def permitpm(event):
 
             if COUNT_PM[event.chat_id] > 4:
                 await event.respond(
-                    "`Você está spammando meu PM, o que não é permitido.`\n"
-                    "`Não permitirei que mande mensagens novamente até aviso prévio `\n"
-                    "`Cya`"
+                    "`You were spamming my master's PM, which I didn't like.`\n"
+                    "`You have been blocked and reported as spam, until further notice.`"
                 )
 
                 try:
@@ -98,10 +90,9 @@ async def permitpm(event):
                     if BOTLOG:
                         await event.client.send_message(
                             BOTLOG_CHATID,
-                            "Contador de PM está aparentemente ficando lento, plis reinicie o bot!",
+                            "Count PM is seemingly going retard, plis restart bot!",
                         )
-                    LOGS.info("CountPM wen't rarted boi")
-                    return
+                    return LOGS.info("CountPM wen't rarted boi")
 
                 await event.client(BlockRequest(event.chat_id))
                 await event.client(ReportSpamRequest(peer=event.chat_id))
@@ -116,13 +107,13 @@ async def permitpm(event):
                         + "](tg://user?id="
                         + str(event.chat_id)
                         + ")"
-                        + " era só mais um retardado",
+                        + " was spamming your PM so he was blocked.",
                     )
 
 
 @register(disable_edited=True, outgoing=True, disable_errors=True)
 async def auto_accept(event):
-    """ Aprovará automaticamente se você enviar uma mensagem de texto a eles primeiro. """
+    """ Will approve automatically if you texted them first. """
     if not PM_AUTO_BAN:
         return
     self_user = await event.client.get_me()
@@ -133,18 +124,17 @@ async def auto_accept(event):
         and not (await event.get_sender()).bot
     ):
         try:
-            from userbot.modules.sql_helper.globals import gvarstatus
-            from userbot.modules.sql_helper.pm_permit_sql import approve, is_approved
+            from userbot.modules.sql_helper.pm_permit_sql import (
+                approve,
+                gvarstatus,
+                is_approved,
+            )
         except AttributeError:
             return
 
         # Use user custom unapproved message
         get_message = gvarstatus("unapproved_msg")
-        if get_message is not None:
-            UNAPPROVED_MSG = get_message
-        else:
-            UNAPPROVED_MSG = DEF_UNAPPROVED_MSG
-
+        UNAPPROVED_MSG = get_message if get_message is not None else DEF_UNAPPROVED_MSG
         chat = await event.get_chat()
         if isinstance(chat, User):
             if is_approved(event.chat_id) or chat.bot:
@@ -154,7 +144,7 @@ async def auto_accept(event):
             ):
                 if (
                     message.text is not UNAPPROVED_MSG
-                    and message.from_id == self_user.id
+                    and message.sender_id == self_user.id
                 ):
                     try:
                         approve(event.chat_id)
@@ -170,40 +160,36 @@ async def auto_accept(event):
                     )
 
 
-@register(outgoing=True, pattern=r"^.notifoff$")
+@register(outgoing=True, pattern=r"^\.notifoff$")
 async def notifoff(noff_event):
-    """ Para o comando .notifoff, pare de receber notificações de PMs não aprovados. """
+    """ For .notifoff command, stop getting notifications from unapproved PMs. """
     try:
         from userbot.modules.sql_helper.globals import addgvar
     except AttributeError:
-        await noff_event.edit("`Executando em modo não-SQL!`")
-        return
+        return await noff_event.edit("**Running on Non-SQL mode!**")
     addgvar("NOTIF_OFF", True)
-    await noff_event.edit("`Notificações de PMs não aprovados estão silenciadas!`")
+    await noff_event.edit("**Notifications from unapproved PMs are silenced!**")
 
 
-@register(outgoing=True, pattern=r"^.notifon$")
+@register(outgoing=True, pattern=r"^\.notifon$")
 async def notifon(non_event):
-    """ Para o comando .notifoff, obtenha notificações de PMs não aprovados. """
+    """ For .notifoff command, get notifications from unapproved PMs. """
     try:
         from userbot.modules.sql_helper.globals import delgvar
     except AttributeError:
-        await non_event.edit("`Executando em modo não-SQL!`")
-        return
+        return await non_event.edit("**Running on Non-SQL mode!**")
     delgvar("NOTIF_OFF")
-    await non_event.edit(
-        "`Notificações de PMs não-aprovados não estão mais silenciadas!`"
-    )
+    await non_event.edit("**Notifications from unapproved PMs unmuted!**")
 
 
 @register(outgoing=True, pattern=r"^\.approve(?:$| )(.*)")
 async def approvepm(apprvpm):
-    """ Para o comando .approve, dê a alguém as permissões para enviar um PM para você. """
+    """ For .approve command, give someone the permissions to PM you. """
     try:
         from userbot.modules.sql_helper.globals import gvarstatus
         from userbot.modules.sql_helper.pm_permit_sql import approve
     except AttributeError:
-        return await apprvpm.edit("**Executando em modo não-SQL!**")
+        return await apprvpm.edit("**Running on Non-SQL mode!**")
 
     if apprvpm.reply_to_msg_id:
         reply = await apprvpm.get_reply_message()
@@ -222,16 +208,18 @@ async def approvepm(apprvpm):
         try:
             user = await apprvpm.client.get_entity(inputArgs)
         except:
-            return await apprvpm.edit("**ID/Nome de usuário inválido.**")
+            return await apprvpm.edit("**Invalid username/ID.**")
+
         if not isinstance(user, User):
-            return await apprvpm.edit("**Isso pode ser feito apenas com usuários.**")
+            return await apprvpm.edit("**This can be done only with users.**")
+
         uid = user.id
         name0 = str(user.first_name)
 
     else:
         aname = await apprvpm.client.get_entity(apprvpm.chat_id)
         if not isinstance(aname, User):
-            return await apprvpm.edit("**Isso pode ser feito apenas com usuários.**")
+            return await apprvpm.edit("**This can be done only with users.**")
         name0 = str(aname.first_name)
         uid = apprvpm.chat_id
 
@@ -246,14 +234,14 @@ async def approvepm(apprvpm):
     try:
         approve(uid)
     except IntegrityError:
-        return await apprvpm.edit("**O usuário já deve estar permitido.**")
+        return await apprvpm.edit("**User may already be approved.**")
 
-    await apprvpm.edit(f"[{name0}](tg://user?id={uid}) **permitido de enviar PMs!**")
+    await apprvpm.edit(f"[{name0}](tg://user?id={uid}) **approved to PM!**")
 
     if BOTLOG:
         await apprvpm.client.send_message(
             BOTLOG_CHATID,
-            "#APROVADO\n" + "Usuário: " + f"[{name0}](tg://user?id={uid})",
+            "#APPROVED\n" + "User: " + f"[{name0}](tg://user?id={uid})",
         )
 
 
@@ -262,7 +250,7 @@ async def disapprovepm(disapprvpm):
     try:
         from userbot.modules.sql_helper.pm_permit_sql import dissprove
     except BaseException:
-        return await disapprvpm.edit("**Executando em modo não-SQL!**")
+        return await disapprvpm.edit("**Running on Non-SQL mode!**")
 
     if disapprvpm.reply_to_msg_id:
         reply = await disapprvpm.get_reply_message()
@@ -282,10 +270,10 @@ async def disapprovepm(disapprvpm):
         try:
             user = await disapprvpm.client.get_entity(inputArgs)
         except:
-            return await disapprvpm.edit("**ID/Nome de usuário inválido.**")
+            return await disapprvpm.edit("**Invalid username/ID.**")
 
         if not isinstance(user, User):
-            return await disapprvpm.edit("**Isso pode ser feito apenas com usuários.**")
+            return await disapprvpm.edit("**This can be done only with users.**")
 
         aname = user.id
         dissprove(aname)
@@ -295,36 +283,36 @@ async def disapprovepm(disapprvpm):
         dissprove(disapprvpm.chat_id)
         aname = await disapprvpm.client.get_entity(disapprvpm.chat_id)
         if not isinstance(aname, User):
-
-            return await disapprvpm.edit("**Isso pode ser feito apenas com usuários.**")
+            return await disapprvpm.edit("**This can be done only with users.**")
         name0 = str(aname.first_name)
+        aname = aname.id
 
-    await disapprvpm.edit(
-        f"[{name0}](tg://user?id={aname}) **Proibido de enviar PMs!**"
-    )
+    await disapprvpm.edit(f"[{name0}](tg://user?id={aname}) **disapproved to PM!**")
 
     if BOTLOG:
         await disapprvpm.client.send_message(
             BOTLOG_CHATID,
-            f"[{name0}](tg://user?id={aname})" " foi proibido de mandar PMs para você.",
+            f"[{name0}](tg://user?id={aname})" " was disapproved to PM you.",
         )
 
 
-@register(outgoing=True, pattern=r"^.block$")
+@register(outgoing=True, pattern=r"^\.block$")
 async def blockpm(block):
-    """ Para o comando .block, bloqueia as pessoas de enviarem PMs para você! """
+    """ For .block command, block people from PMing you! """
     if block.reply_to_msg_id:
         reply = await block.get_reply_message()
-        replied_user = await block.client.get_entity(reply.from_id)
+        replied_user = await block.client.get_entity(reply.sender_id)
         aname = replied_user.id
         name0 = str(replied_user.first_name)
         await block.client(BlockRequest(aname))
-        await block.edit("`Você foi bloqueado!`")
+        await block.edit("**You've been blocked!**")
         uid = replied_user.id
     else:
         await block.client(BlockRequest(block.chat_id))
         aname = await block.client.get_entity(block.chat_id)
-        await block.edit("`Você foi bloqueado!`")
+        if not isinstance(aname, User):
+            return await block.edit("**This can be done only with users.**")
+        await block.edit("**You've been blocked!**")
         name0 = str(aname.first_name)
         uid = block.chat_id
 
@@ -338,41 +326,39 @@ async def blockpm(block):
     if BOTLOG:
         await block.client.send_message(
             BOTLOG_CHATID,
-            "#BLOQUEADO\n" + "Usuário: " + f"[{name0}](tg://user?id={uid})",
+            "#BLOCKED\n" + "User: " + f"[{name0}](tg://user?id={uid})",
         )
 
 
-@register(outgoing=True, pattern=r"^.unblock$")
+@register(outgoing=True, pattern=r"^\.unblock$")
 async def unblockpm(unblock):
-    """ Para o comando .unblock, deixe as pessoas enviarem PMs para você novamente! """
+    """ For .unblock command, let people PMing you again! """
     if unblock.reply_to_msg_id:
         reply = await unblock.get_reply_message()
-        replied_user = await unblock.client.get_entity(reply.from_id)
+        replied_user = await unblock.client.get_entity(reply.sender_id)
         name0 = str(replied_user.first_name)
         await unblock.client(UnblockRequest(replied_user.id))
-        await unblock.edit("`Você foi desbloqueado!`")
+        await unblock.edit("**You have been unblocked.**")
 
     if BOTLOG:
         await unblock.client.send_message(
             BOTLOG_CHATID,
-            f"[{name0}](tg://user?id={replied_user.id})" " foi desbloqueado!.",
+            f"[{name0}](tg://user?id={replied_user.id})" " was unblocc'd!.",
         )
 
 
-@register(outgoing=True, pattern=r"^.(set|get|reset) pm_msg(?: |$)(\w*)")
+@register(outgoing=True, pattern=r"^\.(set|get|reset) pmpermit(?: |$)(\w*)")
 async def add_pmsg(cust_msg):
-    """ Defina sua própria Mensagem não aprovada automática. """
+    """Set your own Unapproved message"""
     if not PM_AUTO_BAN:
-        return await cust_msg.edit(
-            "Você precisa definir `PM_AUTO_BAN` nas ConfigVars do Heroku para `True`"
-        )
+        return await cust_msg.edit("You need to set `PM_AUTO_BAN` to `True`")
     try:
         import userbot.modules.sql_helper.globals as sql
     except AttributeError:
-        await cust_msg.edit("`Executando em modo não-SQL!`")
+        await cust_msg.edit("**Running on Non-SQL mode!**")
         return
 
-    await cust_msg.edit("Processando...")
+    await cust_msg.edit("**Processing...**")
     conf = cust_msg.pattern_match.group(1)
 
     custom_message = sql.gvarstatus("unapproved_msg")
@@ -386,68 +372,59 @@ async def add_pmsg(cust_msg):
             sql.delgvar("unapproved_msg")
             status = "Updated"
 
-        if message:
-            # TODO: allow user to have a custom text formatting
-            # eg: bold, underline, striketrough, link
-            # for now all text are in monoscape
-            msg = message.message  # get the plain text
-            sql.addgvar("unapproved_msg", msg)
-        else:
-            return await cust_msg.edit("`Responda a uma mensagem`")
+        if not message:
+            return await cust_msg.edit("**Reply to a message.**")
 
-        await cust_msg.edit("`Mensagem salva como Mensagem não aprovada automática`")
+        # TODO: allow user to have a custom text formatting
+        # eg: bold, underline, striketrough, link
+        # for now all text are in monoscape
+        msg = message.message  # get the plain text
+        sql.addgvar("unapproved_msg", msg)
+        await cust_msg.edit("**Message saved as PMPermit message.**")
 
         if BOTLOG:
             await cust_msg.client.send_message(
-                BOTLOG_CHATID,
-                f"***{status} Mensagem não aprovada automática :*** \n\n{msg}",
+                BOTLOG_CHATID, f"***{status} PMPermit message :*** \n\n{msg}"
             )
 
     if conf.lower() == "reset":
-        if custom_message is not None:
-            sql.delgvar("unapproved_msg")
-            await cust_msg.edit(
-                "`Mensagem não aprovada automática redefinida para o padrão`"
-            )
-        else:
-            await cust_msg.edit("`Você ainda não definiu uma mensagem personalizada`")
+        if custom_message is None:
+            await cust_msg.edit("**You haven't set a custom PMPermit message yet.**")
 
+        else:
+            sql.delgvar("unapproved_msg")
+            await cust_msg.edit("**PMPermit message has been reset to default.**")
     if conf.lower() == "get":
         if custom_message is not None:
             await cust_msg.edit(
-                "***Esta é a sua Mensagem não aprovada automática atual:***"
-                f"\n\n{custom_message}"
+                "**This is your current PMPermit message:**" f"\n\n{custom_message}"
             )
         else:
             await cust_msg.edit(
-                "*Você ainda não definiu Mensagem não aprovada automática*\n"
-                f"Usando mensagem padrão: \n\n`{DEF_UNAPPROVED_MSG}`"
+                "**You haven't set a custom PMPermit message yet.**\n"
+                f"Using default message: \n\n`{DEF_UNAPPROVED_MSG}`"
             )
 
 
 CMD_HELP.update(
     {
-        "pmpermit": "\
-.approve\
-\nUso: Aprova a pessoa mencionada/respondida a enviar PMs.\
-\n\n.disapprove\
-\nUso: Proibe a pessoa mencionada/respondida a enviar PMs.\
-\n\n.block\
-\nUso: Bloqueia a pessoa.\
-\n\n.unblock\
-\nUso: Desbloqueia a pessoa para que ela possa lhe enviar PMs.\
-\n\n.notifoff\
-\nUso: Limpa/desativa quaisquer notificações de PMs não aprovados.\
-\n\n.notifon\
-\nUso: Permite notificações para PMs não aprovados.\
-\n\n.set pm_msg <reply to msg>\
-\nUso: Define sua própria Mensagem não aprovada automática.\
-\n\n.get pm_msg\
-\nUso: Obtenha sua Mensagem não aprovada automática atual.\
-\n\n.reset pm_msg\
-\nUso: Redefine sua Mensagem não aprovada automática.\
-\n\n*A mensagem não aprovada personalizada atualmente não pode ser definida\
-\ntexto formatado como negrito, sublinhado, link, etc..\
-\nA mensagem será enviada apenas em monoscape"
+        "pmpermit": ">`.approve`"
+        "\nUsage: Approves the mentioned/replied person to PM."
+        "\n\n>`.disapprove`"
+        "\nUsage: Disapproves the mentioned/replied person to PM."
+        "\n\n>`.block`"
+        "\nUsage: Blocks the person."
+        "\n\n>`.unblock`"
+        "\nUsage: Unblocks the person so they can PM you."
+        "\n\n>`.notifoff`"
+        "\nUsage: Clears/Disables any notifications of unapproved PMs."
+        "\n\n>`.notifon`"
+        "\nUsage: Allows notifications for unapproved PMs."
+        "\n\n`.set pmpermit` <reply to msg>"
+        "\nUsage: Sets a custom PMPermit message."
+        "\n\n`.get pmpermit`"
+        "\nUsage: Shows your current PMPermit message."
+        "\n\n`.reset pmpermit`"
+        "\nUsage: Resets PMPermit message to default."
     }
 )

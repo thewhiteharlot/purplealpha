@@ -1,8 +1,4 @@
 # Copyright (C) 2020 KenHV
-#
-# Licensed under the Raphielscape Public License, Version 1.d (the "License");
-# you may not use this file except in compliance with the License.
-#
 
 from sqlalchemy.exc import IntegrityError
 
@@ -20,24 +16,27 @@ async def fban(event):
 
     if event.is_reply:
         reply_msg = await event.get_reply_message()
-        fban_id = reply_msg.from_id
+        fban_id = reply_msg.sender_id
         reason = event.pattern_match.group(1)
-        user_link = f"[{fban_id}](tg://user?id={fban_id})"
     else:
         pattern = str(event.pattern_match.group(1)).split()
         fban_id = pattern[0]
         reason = " ".join(pattern[1:])
-        user_link = fban_id
 
-    self_user = await event.client.get_me()
+    try:
+        fban_id = await event.client.get_peer_id(fban_id)
+    except:
+        pass
 
-    if fban_id == self_user.id or fban_id == "@" + self_user.username:
+    if event.sender_id == fban_id:
         return await event.edit(
-            "**Error: This action has been prevented by PurpleBot self preservation protocols.**"
+            "**Error: This action has been prevented by KensurBot self preservation protocols.**"
         )
 
-    if len((fed_list := get_flist())) == 0:
+    if len(fed_list := get_flist()) == 0:
         return await event.edit("**You haven't connected to any federations yet!**")
+
+    user_link = f"[{fban_id}](tg://user?id={fban_id})"
 
     await event.edit(f"**Fbanning** {user_link}...")
     failed = []
@@ -88,22 +87,25 @@ async def unfban(event):
 
     if event.is_reply:
         reply_msg = await event.get_reply_message()
-        unfban_id = reply_msg.from_id
+        unfban_id = reply_msg.sender_id
         reason = event.pattern_match.group(1)
-        user_link = f"[{unfban_id}](tg://user?id={unfban_id})"
     else:
         pattern = str(event.pattern_match.group(1)).split()
         unfban_id = pattern[0]
         reason = " ".join(pattern[1:])
-        user_link = unfban_id
 
-    self_user = await event.client.get_me()
+    try:
+        unfban_id = await event.client.get_peer_id(unfban_id)
+    except:
+        pass
 
-    if unfban_id == self_user.id or unfban_id == "@" + self_user.username:
+    if event.sender_id == unfban_id:
         return await event.edit("**Wait, that's illegal**")
 
-    if len((fed_list := get_flist())) == 0:
-        return await event.edit("**You haven't connected any federations yet!**")
+    if len(fed_list := get_flist()) == 0:
+        return await event.edit("**You haven't connected to any federations yet!**")
+
+    user_link = f"[{unfban_id}](tg://user?id={unfban_id})"
 
     await event.edit(f"**Un-fbanning **{user_link}**...**")
     failed = []
@@ -144,7 +146,7 @@ async def unfban(event):
     )
 
 
-@register(outgoing=True, pattern=r"^\.addf *(.*)")
+@register(outgoing=True, pattern=r"^\.addf(?: |$)(.*)")
 async def addf(event):
     """Adds current chat to connected federations."""
     try:
@@ -185,7 +187,7 @@ async def listf(event):
     except IntegrityError:
         return await event.edit("**Running on Non-SQL mode!**")
 
-    if len((fed_list := get_flist())) == 0:
+    if len(fed_list := get_flist()) == 0:
         return await event.edit("**You haven't connected to any federations yet!**")
 
     msg = "**Connected federations:**\n\n"
@@ -210,17 +212,19 @@ async def delf(event):
 
 CMD_HELP.update(
     {
-        "fban": ".fban <id/username> <reason>"
+        "fban": ">`.fban <id/username> <reason>`"
         "\nUsage: Bans user from connected federations."
         "\nYou can reply to the user whom you want to fban or manually pass the username/id."
-        "\n\n.unfban <id/username> <reason>"
+        "\n\n`>.unfban <id/username> <reason>`"
         "\nUsage: Same as fban but unbans the user"
-        "\n\n.addf <name>"
+        "\n\n>`.addf <name>`"
         "\nUsage: Adds current group and stores it as <name> in connected federations."
         "\nAdding one group is enough for one federation."
-        "\n\n.delf"
+        "\n\n>`.delf`"
         "\nUsage: Removes current group from connected federations."
-        "\n\n.listf"
+        "\n\n>`.listf`"
         "\nUsage: Lists all connected federations by specified name."
+        "\n\n>`.clearf`"
+        "\nUsage: Disconnects from all connected federations. Use it carefully."
     }
 )

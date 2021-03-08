@@ -18,13 +18,13 @@ from userbot.events import register
 async def memify(event):
     reply_msg = await event.get_reply_message()
     input_str = event.pattern_match.group(1)
-    await event.edit("**Processando...**")
+    await event.edit("**Processing...**")
 
     if not reply_msg:
-        return await event.edit("**Responda a uma mensagem contendo mídia!**")
+        return await event.edit("**Reply to a message containing media!**")
 
     if not reply_msg.media:
-        return await event.edit("**Responda a uma imagem/sticker/gif/vídeo!**")
+        return await event.edit("**Reply to an image/sticker/gif/video!**")
 
     if not os.path.isdir(TEMP_DOWNLOAD_DIRECTORY):
         os.makedirs(TEMP_DOWNLOAD_DIRECTORY)
@@ -33,31 +33,29 @@ async def memify(event):
     input_file = os.path.join(TEMP_DOWNLOAD_DIRECTORY, os.path.basename(input_file))
 
     if input_file.endswith(".tgs"):
-        await event.edit("**Extraindo o primeiro quadro...**")
+        await event.edit("**Extracting first frame...**")
         converted_file = os.path.join(TEMP_DOWNLOAD_DIRECTORY, "meme.webp")
         cmd = f"lottie_convert.py --frame 0 {input_file} {converted_file}"
         await runcmd(cmd)
         os.remove(input_file)
         if not os.path.lexists(converted_file):
-            return await event.edit(
-                "**Não foi possível analisar este sticker animado.**"
-            )
+            return await event.edit("**Couldn't parse this animated sticker.**")
         input_file = converted_file
 
     elif input_file.endswith(".mp4"):
-        await event.edit("**Extraindo o primeiro quadro...**")
+        await event.edit("**Extracting first frame...**")
         converted_file = os.path.join(TEMP_DOWNLOAD_DIRECTORY, "meme.png")
         await take_screen_shot(input_file, 0, converted_file)
         os.remove(input_file)
         if not os.path.lexists(converted_file):
-            return await event.edit("**Não foi possível analisar este vídeo.**")
+            return await event.edit("**Couldn't parse this video.**")
         input_file = converted_file
 
-    await event.edit("**Adicionando texto...**")
+    await event.edit("**Adding text...**")
     try:
         final_image = await add_text_img(input_file, input_str)
     except Exception as e:
-        return await event.edit(f"**Um erro ocorreu:**\n`{e}`")
+        return await event.edit(f"**An error occurred:**\n`{e}`")
     await event.client.send_file(
         entity=event.chat_id, file=final_image, reply_to=reply_msg
     )
@@ -154,8 +152,8 @@ async def take_screen_shot(
 
 CMD_HELP.update(
     {
-        "memify": ">`.mmf <texto de cima>;<texto de baixo>`"
-        "\nUso: Responda a uma imagem/sticker/gif/vídeo para adicionar texto a ele."
-        "\nSe for um vídeo, o texto será adicionado ao primeiro quadro."
+        "memify": ">`.mmf <top text>;<bottom text>`"
+        "\nUsage: Reply to an image/sticker/gif/video to add text to it."
+        "\nIf it's a video, text will be added to the first frame."
     }
 )
