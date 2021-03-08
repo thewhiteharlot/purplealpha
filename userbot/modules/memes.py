@@ -1268,16 +1268,18 @@ async def slap(replied_user, event):
     throw = choice(THROW)
     where = choice(WHERE)
 
-    return "..." + temp.format(
+    caption = "..." + temp.format(
         victim=slapped, item=item, hits=hit, throws=throw, where=where
     )
+
+    return caption
 
 
 @register(outgoing=True, pattern="^-_-$", ignore_unsafe=True)
 async def emo(sigh):
     """Ok..."""
     okay = "-_-"
-    for _ in range(10):
+    for i in range(10):
         okay = okay[:-1] + "_-"
         await sigh.edit(okay)
 
@@ -1285,7 +1287,7 @@ async def emo(sigh):
 @register(outgoing=True, pattern="^.(yes|no|maybe|decide)$")
 async def decide(event):
     decision = event.pattern_match.group(1).lower()
-    message_id = event.reply_to_msg_id or None
+    message_id = event.reply_to_msg_id if event.reply_to_msg_id else None
     if decision != "decide":
         r = requests.get(f"https://yesno.wtf/api?force={decision}").json()
     else:
@@ -1299,7 +1301,7 @@ async def decide(event):
 @register(outgoing=True, pattern="^;_;$", ignore_unsafe=True)
 async def fun(idk):
     t = ";_;"
-    for _ in range(10):
+    for j in range(10):
         t = t[:-1] + "_;"
         await idk.edit(t)
 
@@ -1348,7 +1350,10 @@ async def copypasta(cp_e):
         elif owo.lower() == b_char:
             reply_text += "🅱️"
         else:
-            reply_text += owo.upper() if bool(getrandbits(1)) else owo.lower()
+            if bool(getrandbits(1)):
+                reply_text += owo.upper()
+            else:
+                reply_text += owo.lower()
     reply_text += choice(EMOJIS)
     await cp_e.edit(reply_text)
 
@@ -1356,7 +1361,7 @@ async def copypasta(cp_e):
 @register(outgoing=True, pattern="^.vapor(?: |$)(.*)")
 async def vapor(vpr):
     """ Vaporize everything! """
-    reply_text = []
+    reply_text = list()
     textx = await vpr.get_reply_message()
     message = vpr.pattern_match.group(1)
     if message:
@@ -1400,7 +1405,7 @@ async def stretch(stret):
 @register(outgoing=True, pattern="^.zal(?: |$)(.*)")
 async def zal(zgfy):
     """ Invoke the feeling of chaos. """
-    reply_text = []
+    reply_text = list()
     textx = await zgfy.get_reply_message()
     message = zgfy.pattern_match.group(1)
     if message:
@@ -1418,7 +1423,7 @@ async def zal(zgfy):
             reply_text.append(charac)
             continue
 
-        for _ in range(3):
+        for _ in range(0, 3):
             textz = randint(0, 2)
 
             if textz == 0:
@@ -1538,7 +1543,7 @@ async def pressf(f):
 @register(outgoing=True, pattern="^Oof$")
 async def Oof(woof):
     t = "Oof"
-    for _ in range(15):
+    for j in range(15):
         t = t[:-1] + "of"
         await woof.edit(t)
 
@@ -1547,7 +1552,7 @@ async def Oof(woof):
 async def moon(moone):
     deq = deque(list("🌗🌘🌑🌒🌓🌔🌕🌖"))
     try:
-        for _ in range(32):
+        for x in range(32):
             await sleep(0.1)
             await moone.edit("".join(deq))
             deq.rotate(1)
@@ -1559,7 +1564,7 @@ async def moon(moone):
 async def earth(event):
     deq = deque(list("🌏🌍🌎🌎🌍🌏🌍🌎"))
     try:
-        for _ in range(32):
+        for x in range(32):
             await sleep(0.1)
             await event.edit("".join(deq))
             deq.rotate(1)
@@ -1571,7 +1576,7 @@ async def earth(event):
 async def clock(event):
     deq = deque(list("🕙🕘🕗🕖🕕🕔🕓🕒🕑🕐🕛"))
     try:
-        for _ in range(32):
+        for x in range(32):
             await sleep(0.1)
             await event.edit("".join(deq))
             deq.rotate(1)
@@ -1582,7 +1587,7 @@ async def clock(event):
 @register(outgoing=True, pattern="^.mock(?: |$)(.*)")
 async def spongemocktext(mock):
     """ Do it and find the real fun. """
-    reply_text = []
+    reply_text = list()
     textx = await mock.get_reply_message()
     message = mock.pattern_match.group(1)
     if message:
@@ -2344,7 +2349,7 @@ async def call(event):
     if event.fwd_from:
         return
     animation_interval = 3
-    animation_ttl = range(18)
+    animation_ttl = range(0, 18)
     await event.edit("Ligando...")
     animation_chars = [
         "`Conectando-se à sede do Telegram...`",
@@ -2379,7 +2384,7 @@ async def tghack(event):
     if event.fwd_from:
         return
     animation_interval = 2
-    animation_ttl = range(21)
+    animation_ttl = range(0, 21)
     animation_chars = [
         "```Conectando ao Servidor \\```",
         "```Conectando ao Servidor |```",

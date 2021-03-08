@@ -18,8 +18,9 @@ from userbot.events import register
 async def gethash(hash_q):
     """ For .hash command, find the md5, sha1, sha256, sha512 of the string. """
     hashtxt_ = hash_q.pattern_match.group(1)
-    with open("hashdis.txt", "w+") as hashtxt:
-        hashtxt.write(hashtxt_)
+    hashtxt = open("hashdis.txt", "w+")
+    hashtxt.write(hashtxt_)
+    hashtxt.close()
     md5 = runapp(["md5sum", "hashdis.txt"], stdout=PIPE)
     md5 = md5.stdout.decode()
     sha1 = runapp(["sha1sum", "hashdis.txt"], stdout=PIPE)
@@ -43,8 +44,9 @@ async def gethash(hash_q):
         + "`"
     )
     if len(ans) > 4096:
-        with open("hashes.txt", "w+") as hashfile:
-            hashfile.write(ans)
+        hashfile = open("hashes.txt", "w+")
+        hashfile.write(ans)
+        hashfile.close()
         await hash_q.client.send_file(
             hash_q.chat_id,
             "hashes.txt",

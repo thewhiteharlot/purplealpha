@@ -49,13 +49,13 @@ async def lyrics(lyric):
             reply_to=lyric.id,
         )
         os.remove("lyrics.txt")
+        return True
     else:
         await lyric.edit(
             f"**Consulta de pesquisa**:\n`{artist}` - `{song}`"
             f"\n\n```{songs.lyrics}```"
         )
-
-    return True
+        return True
 
 
 CMD_HELP.update(

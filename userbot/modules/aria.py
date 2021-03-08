@@ -140,6 +140,7 @@ async def resume_all(event):
 
 @register(outgoing=True, pattern="^.ashow(?: |$)(.*)")
 async def show_all(event):
+    output = "output.txt"
     downloads = aria2.get_downloads()
     msg = ""
     for download in downloads:
@@ -165,7 +166,6 @@ async def show_all(event):
         await event.delete()
     else:
         await event.edit("`O resultado é muito grande, enviando-o como um arquivo...`")
-        output = "output.txt"
         with open(output, "w") as f:
             f.write(msg)
         await sleep(2)
@@ -197,11 +197,10 @@ async def check_progress_for_dl(gid, event, previous):
                 percentage = int(file.progress)
                 downloaded = percentage * int(file.total_length) / 100
                 prog_str = "`Baixando` | [{0}{1}] `{2}`".format(
-                    "".join("■" for i in range(math.floor(percentage / 10))),
-                    "".join("▨" for i in range(10 - math.floor(percentage / 10))),
+                    "".join(["■" for i in range(math.floor(percentage / 10))]),
+                    "".join(["▨" for i in range(10 - math.floor(percentage / 10))]),
                     file.progress_string(),
                 )
-
                 msg = (
                     f"`Nome`: `{file.name}`\n"
                     f"`Status` -> **{file.status.capitalize()}**\n"

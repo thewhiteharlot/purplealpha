@@ -83,13 +83,14 @@ async def ReTrieveFile(input_file_name):
     files = {
         "image_file": (input_file_name, open(input_file_name, "rb")),
     }
-    return requests.post(
+    r = requests.post(
         "https://api.remove.bg/v1.0/removebg",
         headers=headers,
         files=files,
         allow_redirects=True,
         stream=True,
     )
+    return r
 
 
 async def ReTrieveURL(input_url):
@@ -97,13 +98,14 @@ async def ReTrieveURL(input_url):
         "X-API-Key": REM_BG_API_KEY,
     }
     data = {"image_url": input_url}
-    return requests.post(
+    r = requests.post(
         "https://api.remove.bg/v1.0/removebg",
         headers=headers,
         data=data,
         allow_redirects=True,
         stream=True,
     )
+    return r
 
 
 CMD_HELP.update(

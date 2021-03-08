@@ -152,7 +152,9 @@ async def promote(promt):
     user, rank = await get_user_from_event(promt)
     if not rank:
         rank = "Administrator"  # Just in case.
-    if not user:
+    if user:
+        pass
+    else:
         return
 
     # Try to promote if current user is admin or creator
@@ -193,7 +195,9 @@ async def demote(dmod):
     rank = "admeme"  # dummy rank, lol.
     user = await get_user_from_event(dmod)
     user = user[0]
-    if not user:
+    if user:
+        pass
+    else:
         return
 
     # New rights after demotion
@@ -240,7 +244,9 @@ async def ban(bon):
         return
 
     user, reason = await get_user_from_event(bon)
-    if not user:
+    if user:
+        pass
+    else:
         return
 
     # Announce that we're going to whack the pest
@@ -304,7 +310,9 @@ async def nothanos(unbon):
 
     user = await get_user_from_event(unbon)
     user = user[0]
-    if not user:
+    if user:
+        pass
+    else:
         return
 
     try:
@@ -345,7 +353,9 @@ async def spider(spdr):
         return
 
     user, reason = await get_user_from_event(spdr)
-    if not user:
+    if user:
+        pass
+    else:
         return
 
     self_user = await spdr.client.get_me()
@@ -406,26 +416,30 @@ async def unmoot(unmot):
     await unmot.edit("```Desmutando...```")
     user = await get_user_from_event(unmot)
     user = user[0]
-    if not user:
+    if user:
+        pass
+    else:
         return
 
     if unmute(unmot.chat_id, user.id) is False:
         return await unmot.edit("`Erro! O usuário provavelmente já está desmutado.`")
-    try:
-        await unmot.client(EditBannedRequest(unmot.chat_id, user.id, UNBAN_RIGHTS))
-        await unmot.edit("```Desmutado com sucesso```")
+    else:
 
-    except UserIdInvalidError:
-        await unmot.edit("`Oh oh, minha lógica para desmutar quebrou!`")
-        return
+        try:
+            await unmot.client(EditBannedRequest(unmot.chat_id, user.id, UNBAN_RIGHTS))
+            await unmot.edit("```Desmutado com sucesso```")
 
-    if BOTLOG:
-        await unmot.client.send_message(
-            BOTLOG_CHATID,
-            "#UNMUTE\n"
-            f"USER: [{user.first_name}](tg://user?id={user.id})\n"
-            f"CHAT: {unmot.chat.title}(`{unmot.chat_id}`)",
-        )
+        except UserIdInvalidError:
+            await unmot.edit("`Oh oh, minha lógica para desmutar quebrou!`")
+            return
+
+        if BOTLOG:
+            await unmot.client.send_message(
+                BOTLOG_CHATID,
+                "#UNMUTE\n"
+                f"USER: [{user.first_name}](tg://user?id={user.id})\n"
+                f"CHAT: {unmot.chat.title}(`{unmot.chat_id}`)",
+            )
 
 
 @register(incoming=True, disable_errors=True)
@@ -490,7 +504,9 @@ async def ungmoot(un_gmute):
 
     user = await get_user_from_event(un_gmute)
     user = user[0]
-    if not user:
+    if user:
+        pass
+    else:
         return
 
     # If pass, inform and start ungmuting
@@ -534,7 +550,9 @@ async def gspider(gspdr):
         return
 
     user, reason = await get_user_from_event(gspdr)
-    if not user:
+    if user:
+        pass
+    else:
         return
 
     # If pass, inform and start gmuting
@@ -788,25 +806,25 @@ async def kick(usr):
 async def get_users(show):
     """ For .users command, list all of the users in a chat. """
     info = await show.client.get_entity(show.chat_id)
-    title = info.title or "this chat"
+    title = info.title if info.title else "this chat"
     mentions = "**Usuários em {} grupo**: \n".format(title)
     try:
-        if show.pattern_match.group(1):
-            searchq = show.pattern_match.group(1)
-            async for user in show.client.iter_participants(
-                show.chat_id, search=f"{searchq}"
-            ):
-                if user.deleted:
-                    mentions += f"\nConta deletada `{user.id}`"
-                else:
-                    mentions += (
-                        f"\n[{user.first_name}](tg://user?id={user.id}) `{user.id}`"
-                    )
-        else:
+        if not show.pattern_match.group(1):
             async for user in show.client.iter_participants(show.chat_id):
                 if not user.deleted:
                     mentions += (
                         f"\n ⚜️ [{user.first_name}](tg://user?id={user.id}) `{user.id}`"
+                    )
+                else:
+                    mentions += f"\nConta deletada `{user.id}`"
+        else:
+            searchq = show.pattern_match.group(1)
+            async for user in show.client.iter_participants(
+                show.chat_id, search=f"{searchq}"
+            ):
+                if not user.deleted:
+                    mentions += (
+                        f"\n[{user.first_name}](tg://user?id={user.id}) `{user.id}`"
                     )
                 else:
                     mentions += f"\nConta deletada `{user.id}`"
@@ -818,8 +836,9 @@ async def get_users(show):
         await show.edit(
             "Este é um grupo enorme. Enviando lista de usuários como arquivo."
         )
-        with open("userslist.txt", "w+") as file:
-            file.write(mentions)
+        file = open("userslist.txt", "w+")
+        file.write(mentions)
+        file.close()
         await show.client.send_file(
             show.chat_id,
             "userslist.txt",
@@ -833,7 +852,7 @@ async def get_user_from_event(event):
     """ Get the user from argument or replied message. """
     args = event.pattern_match.group(1).split(" ", 1)
     extra = None
-    if event.reply_to_msg_id and len(args) != 2:
+    if event.reply_to_msg_id and not len(args) == 2:
         previous_message = await event.get_reply_message()
         user_obj = await event.client.get_entity(previous_message.from_id)
         extra = event.pattern_match.group(1)
@@ -882,7 +901,7 @@ async def get_user_from_id(user, event):
 async def get_usersdel(show):
     """ For .usersdel command, list all of the deleted users in a chat. """
     info = await show.client.get_entity(show.chat_id)
-    title = info.title or "this chat"
+    title = info.title if info.title else "this chat"
     mentions = "deletedUsers in {}: \n".format(title)
     try:
         if not show.pattern_match.group(1):
@@ -912,8 +931,9 @@ async def get_usersdel(show):
         await show.edit(
             "Este é um grupo enorme. Enviando lista de usuários excluídos como arquivo."
         )
-        with open("userslist.txt", "w+") as file:
-            file.write(mentions)
+        file = open("userslist.txt", "w+")
+        file.write(mentions)
+        file.close()
         await show.client.send_file(
             show.chat_id,
             "deleteduserslist.txt",
@@ -927,7 +947,7 @@ async def get_userdel_from_event(event):
     """ Get the deleted user from argument or replied message. """
     args = event.pattern_match.group(1).split(" ", 1)
     extra = None
-    if event.reply_to_msg_id and len(args) != 2:
+    if event.reply_to_msg_id and not len(args) == 2:
         previous_message = await event.get_reply_message()
         user_obj = await event.client.get_entity(previous_message.from_id)
         extra = event.pattern_match.group(1)
@@ -980,7 +1000,7 @@ async def _(event):
     if event.fwd_from:
         return
     info = await event.client.get_entity(event.chat_id)
-    title = info.title or "this chat"
+    title = info.title if info.title else "this chat"
     mentions = "**Bots em {} grupo**: \n".format(title)
     input_str = event.pattern_match.group(1)
     to_write_chat = await event.get_input_chat()

@@ -38,7 +38,10 @@ async def get_readable_time(seconds: int) -> str:
 
     while count < 4:
         count += 1
-        remainder, result = divmod(seconds, 60) if count < 3 else divmod(seconds, 24)
+        if count < 3:
+            remainder, result = divmod(seconds, 60)
+        else:
+            remainder, result = divmod(seconds, 24)
         if seconds == 0 and remainder == 0:
             break
         time_list.append(int(result))
@@ -140,86 +143,85 @@ async def sysdetails(sysd):
 @register(outgoing=True, pattern="^.botver$")
 async def bot_ver(event):
     """ For .botver command, get the bot version. """
-    if event.text[0].isalpha() or event.text[0] in ("/", "#", "@", "!"):
-        return
-    if which("git") is not None:
-        ver = await asyncrunapp(
-            "git",
-            "describe",
-            "--all",
-            "--long",
-            stdout=asyncPIPE,
-            stderr=asyncPIPE,
-        )
-        stdout, stderr = await ver.communicate()
-        verout = str(stdout.decode().strip()) + str(stderr.decode().strip())
+    if not event.text[0].isalpha() and event.text[0] not in ("/", "#", "@", "!"):
+        if which("git") is not None:
+            ver = await asyncrunapp(
+                "git",
+                "describe",
+                "--all",
+                "--long",
+                stdout=asyncPIPE,
+                stderr=asyncPIPE,
+            )
+            stdout, stderr = await ver.communicate()
+            verout = str(stdout.decode().strip()) + str(stderr.decode().strip())
 
-        rev = await asyncrunapp(
-            "git",
-            "rev-list",
-            "--all",
-            "--count",
-            stdout=asyncPIPE,
-            stderr=asyncPIPE,
-        )
-        stdout, stderr = await rev.communicate()
-        revout = str(stdout.decode().strip()) + str(stderr.decode().strip())
+            rev = await asyncrunapp(
+                "git",
+                "rev-list",
+                "--all",
+                "--count",
+                stdout=asyncPIPE,
+                stderr=asyncPIPE,
+            )
+            stdout, stderr = await rev.communicate()
+            revout = str(stdout.decode().strip()) + str(stderr.decode().strip())
 
-        await event.edit(
-            "`Versão do Userbot: " f"{verout}" "` \n" "`Revisão: " f"{revout}" "`"
-        )
-    else:
-        await event.edit(
-            "Pena que você não tem git, você está executando - 'v2.5' de qualquer jeito!"
-        )
+            await event.edit(
+                "`Versão do Userbot: " f"{verout}" "` \n" "`Revisão: " f"{revout}" "`"
+            )
+        else:
+            await event.edit(
+                "Pena que você não tem git, você está executando - 'v2.5' de qualquer jeito!"
+            )
 
 
 @register(outgoing=True, pattern="^.pip(?: |$)(.*)")
 async def pipcheck(pip):
     """ For .pip command, do a pip search. """
-    if pip.text[0].isalpha() or pip.text[0] in ("/", "#", "@", "!"):
-        return
-    pipmodule = pip.pattern_match.group(1)
-    if pipmodule:
-        await pip.edit("**Procurando...**")
-        pipc = await asyncrunapp(
-            "pip3",
-            "search",
-            pipmodule,
-            stdout=asyncPIPE,
-            stderr=asyncPIPE,
-        )
+    if not pip.text[0].isalpha() and pip.text[0] not in ("/", "#", "@", "!"):
+        pipmodule = pip.pattern_match.group(1)
+        if pipmodule:
+            await pip.edit("**Procurando...**")
+            pipc = await asyncrunapp(
+                "pip3",
+                "search",
+                pipmodule,
+                stdout=asyncPIPE,
+                stderr=asyncPIPE,
+            )
 
-        stdout, stderr = await pipc.communicate()
-        pipout = str(stdout.decode().strip()) + str(stderr.decode().strip())
+            stdout, stderr = await pipc.communicate()
+            pipout = str(stdout.decode().strip()) + str(stderr.decode().strip())
 
-        if pipout:
-            if len(pipout) > 4096:
-                await pip.edit("**Resultado muito grande, enviando como arquivo**")
-                with open("output.txt", "w+") as file:
+            if pipout:
+                if len(pipout) > 4096:
+                    await pip.edit("**Resultado muito grande, enviando como arquivo**")
+                    file = open("output.txt", "w+")
                     file.write(pipout)
-                await pip.client.send_file(
-                    pip.chat_id,
-                    "output.txt",
-                    reply_to=pip.id,
+                    file.close()
+                    await pip.client.send_file(
+                        pip.chat_id,
+                        "output.txt",
+                        reply_to=pip.id,
+                    )
+                    remove("output.txt")
+                    return
+                await pip.edit(
+                    "**Consulta: **\n`"
+                    f"pip3 search {pipmodule}"
+                    "`\n**Resultado: **\n`"
+                    f"{pipout}"
+                    "`"
                 )
-                remove("output.txt")
-                return
-            await pip.edit(
-                "**Consulta: **\n`"
-                f"pip3 search {pipmodule}"
-                "`\n**Resultado: **\n`"
-                f"{pipout}"
-                "`"
-            )
+            else:
+                await pip.edit(
+                    "**Consulta: **\n`"
+                    f"pip3 search {pipmodule}"
+                    "`\n**Resultado: **\n`Nenhum resultado encontrado/falso`"
+                )
         else:
-            await pip.edit(
-                "**Consulta: **\n`"
-                f"pip3 search {pipmodule}"
-                "`\n**Resultado: **\n`Nenhum resultado encontrado/falso`"
-            )
-    else:
-        await pip.edit("**Use .help pip para ver um exemplo**")
+            await pip.edit("**Use .help pip para ver um exemplo**")
 
 
 @register(outgoing=True, pattern=r"^.(alive|on)$")
@@ -257,7 +259,7 @@ async def amireallyalive(alive):
 async def amireallyaliveuser(username):
     """ For .aliveu command, change the username in the .alive command. """
     message = username.text
-    if message != ".aliveu" and message[7:8] == " ":
+    if not (message == ".aliveu" or message[7:8] != " "):
         newuser = message[8:]
         global DEFAULTUSER
         DEFAULTUSER = newuser

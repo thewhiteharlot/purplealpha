@@ -120,20 +120,17 @@ async def ANTI_SPAMBOTS(welcm):
                         reason = "Corresponde em `bit.ly` URLs"
                         spambot = True
                     else:
-                        if (
-                            check_user.first_name
-                            in (
-                                "Bitmex",
-                                "Promotion",
-                                "Information",
-                                "Dex",
-                                "Announcements",
-                                "Info",
-                            )
-                            and users.last_name == "Bot"
+                        if check_user.first_name in (
+                            "Bitmex",
+                            "Promotion",
+                            "Information",
+                            "Dex",
+                            "Announcements",
+                            "Info",
                         ):
-                            reason = "Spambot conhecido"
-                            spambot = True
+                            if users.last_name == "Bot":
+                                reason = "Spambot conhecido"
+                                spambot = True
 
                     if spambot:
                         print(f"Possível mensagem de spam: {message.text}")
@@ -183,17 +180,18 @@ async def ANTI_SPAMBOTS(welcm):
                             kicked = False
                             reported = True
 
-                if BOTLOG and (kicked or reported):
-                    await welcm.client.send_message(
-                        BOTLOG_CHATID,
-                        "#ANTI_SPAMBOT REPORT\n"
-                        f"USUÁRIO: [{check_user.first_name}](tg://user?id={check_user.id})\n"
-                        f"USUÁRIO ID: `{check_user.id}`\n"
-                        f"CHAT: {welcm.chat.title}\n"
-                        f"CHAT ID: `{welcm.chat_id}`\n"
-                        f"RAZÃO: {reason}\n"
-                        f"MENSAGEM:\n\n{message.text}",
-                    )
+                if BOTLOG:
+                    if kicked or reported:
+                        await welcm.client.send_message(
+                            BOTLOG_CHATID,
+                            "#ANTI_SPAMBOT REPORT\n"
+                            f"USUÁRIO: [{check_user.first_name}](tg://user?id={check_user.id})\n"
+                            f"USUÁRIO ID: `{check_user.id}`\n"
+                            f"CHAT: {welcm.chat.title}\n"
+                            f"CHAT ID: `{welcm.chat_id}`\n"
+                            f"RAZÃO: {reason}\n"
+                            f"MENSAGEM:\n\n{message.text}",
+                        )
     except ValueError:
         pass
 
