@@ -243,7 +243,9 @@ async def upload(event):
                     lst_files.append(os.path.join(root, file))
             if not lst_files:
                 return await event.edit(f"`{input_str}` **está vazia.**")
-            await event.edit(f"**Achados** `{len(lst_files)}` **arquivos. Enviando...**")
+            await event.edit(
+                f"**Achados** `{len(lst_files)}` **arquivos. Enviando...**"
+            )
             for files in sorted(lst_files):
                 file_name = os.path.basename(files)
                 thumb = None

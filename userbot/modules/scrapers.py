@@ -120,7 +120,9 @@ async def img_sampler(event):
         query = str(event.pattern_match.group(2))
 
     if not query:
-        return await event.edit("**Responda a uma mensagem ou passe uma consulta para pesquisar!**")
+        return await event.edit(
+            "**Responda a uma mensagem ou passe uma consulta para pesquisar!**"
+        )
 
     await event.edit("**Processando...**")
 
@@ -196,7 +198,9 @@ async def gsearch(event):
         match = str(event.pattern_match.group(2))
 
     if not match:
-        return await event.edit("**Responda a uma mensagem ou passe uma consulta para pesquisar!**")
+        return await event.edit(
+            "**Responda a uma mensagem ou passe uma consulta para pesquisar!**"
+        )
 
     await event.edit("**Processando...**")
 
@@ -230,7 +234,8 @@ async def gsearch(event):
             break
 
     await event.edit(
-        "**Consulta de pesquisa:**\n`" + match + "`\n\n**Resultados:**\n" + msg, link_preview=False
+        "**Consulta de pesquisa:**\n`" + match + "`\n\n**Resultados:**\n" + msg,
+        link_preview=False,
     )
 
 
@@ -245,7 +250,9 @@ async def wiki(wiki_q):
         match = str(wiki_q.pattern_match.group(1))
 
     if not match:
-        return await wiki_q.edit("**Responda a uma mensagem ou passe uma consulta para pesquisar!**")
+        return await wiki_q.edit(
+            "**Responda a uma mensagem ou passe uma consulta para pesquisar!**"
+        )
 
     await wiki_q.edit("**Processando...**")
 
@@ -281,7 +288,9 @@ async def urban_dict(event):
         query = str(event.pattern_match.group(1))
 
     if not query:
-        return await event.edit("**Responda a uma mensagem ou passe uma consulta para pesquisar!**")
+        return await event.edit(
+            "**Responda a uma mensagem ou passe uma consulta para pesquisar!**"
+        )
 
     await event.edit("**Processando...**")
     ud = asyncurban.UrbanDictionary()
@@ -561,7 +570,9 @@ async def yt_search(event):
         query = str(event.pattern_match.group(2))
 
     if not query:
-        return await event.edit("**Responda a uma mensagem ou passe uma consulta para pesquisar!**")
+        return await event.edit(
+            "**Responda a uma mensagem ou passe uma consulta para pesquisar!**"
+        )
 
     await event.edit("**Processando...**")
 
@@ -577,7 +588,9 @@ async def yt_search(event):
     try:
         results = json.loads(YoutubeSearch(query, max_results=counter).to_json())
     except KeyError:
-        return await event.edit("**Youtube está louco!.\nNão é possível pesquisar esta consulta!**")
+        return await event.edit(
+            "**Youtube está louco!.\nNão é possível pesquisar esta consulta!**"
+        )
 
     output = f"**Consulta de pesquisa:**\n`{query}`\n\n**Resultados:**\n"
 
@@ -606,7 +619,9 @@ async def download_video(v_url):
         url = str(v_url.pattern_match.group(2))
 
     if not url:
-        return await v_url.edit("**Responda a uma mensagem com um URL ou passe um URL!**")
+        return await v_url.edit(
+            "**Responda a uma mensagem com um URL ou passe um URL!**"
+        )
 
     type = v_url.pattern_match.group(1).lower()
     await v_url.edit("**Preparando para baixar...**")
@@ -672,16 +687,22 @@ async def download_video(v_url):
     except PostProcessingError:
         return await v_url.edit("**Ocorreu um erro durante o pós-processamento.**")
     except UnavailableVideoError:
-        return await v_url.edit("**A mídia não está disponível no formato solicitado.**")
+        return await v_url.edit(
+            "**A mídia não está disponível no formato solicitado.**"
+        )
     except XAttrMetadataError as XAME:
         return await v_url.edit(f"`{XAME.code}: {XAME.msg}\n{XAME.reason}`")
     except ExtractorError:
-        return await v_url.edit("**Ocorreu um erro durante a extração de informações.**")
+        return await v_url.edit(
+            "**Ocorreu um erro durante a extração de informações.**"
+        )
     except Exception as e:
         return await v_url.edit(f"{str(type(e)): {str(e)}}")
     c_time = time.time()
     if song:
-        await v_url.edit(f"**Preparando para fazer upload da música:**\n**{rip_data['title']}**")
+        await v_url.edit(
+            f"**Preparando para fazer upload da música:**\n**{rip_data['title']}**"
+        )
         with open(rip_data["id"] + ".mp3", "rb") as f:
             result = await upload_file(
                 client=v_url.client,
@@ -777,8 +798,10 @@ CMD_HELP.update(
         "google": ">`.google [número] <consulta> [ou resposta]`"
         "\n**Uso:** Faz uma pesquisa no Google."
         "\nPode especificar o número de resultados necessários (o padrão é 3).",
-        "wiki": ">`.wiki <consulta> [ou resposta]`" "\n**Uso:** Faz uma pesquisa na Wikipedia.",
-        "ud": ">`.ud <consulta> [ou resposta]`" "\n**Uso:** Faz uma pesquisa no Dicionário Urbano.",
+        "wiki": ">`.wiki <consulta> [ou resposta]`"
+        "\n**Uso:** Faz uma pesquisa na Wikipedia.",
+        "ud": ">`.ud <consulta> [ou resposta]`"
+        "\n**Uso:** Faz uma pesquisa no Dicionário Urbano.",
         "tts": ">`.tts <text> [ou resposta]`"
         "\n**Uso:** Traduz texto em fala para o idioma definido."
         "\nUse >`.lang tts <código da linguagem>` para definir o idioma do tts. (Padrão é PT-BR.)",
@@ -788,7 +811,8 @@ CMD_HELP.update(
         "yt": ">`.yt [número] <consulta> [ou resposta]`"
         "\n**Uso:** Faz uma pesquisa no YouTube."
         "\nPode especificar o número de resultados necessários (o padrão é 3).",
-        "imdb": ">`.imdb <nome-do-filme>`" "\n**Uso:** Mostra informações do filme e outras coisas.",
+        "imdb": ">`.imdb <nome-do-filme>`"
+        "\n**Uso:** Mostra informações do filme e outras coisas.",
         "rip": ">`.ra <url> [ou resposta] ou .rv <url> [ou resposta]`"
         "\n**Uso:** Baixe vídeos e músicas do YouTube "
         "(e [muitos outros sites](https://ytdl-org.github.io/youtube-dl/supportedsites.html)).",

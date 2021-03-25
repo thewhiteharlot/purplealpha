@@ -80,10 +80,14 @@ async def ANTI_SPAMBOTS(welcm):
                     check_user = await welcm.client.get_entity(user_id)
 
                     # DEBUGGING. LEAVING IT HERE FOR SOME TIME ###
-                    print(f"Novo usuário: {check_user.first_name} [ID: {check_user.id}]")
+                    print(
+                        f"Novo usuário: {check_user.first_name} [ID: {check_user.id}]"
+                    )
                     print(f"Chat: {welcm.chat.title}")
                     print(f"Horário: {join_time}")
-                    print(f"Mensagem enviada: {message.text}\n\n[Horário: {message_date}]")
+                    print(
+                        f"Mensagem enviada: {message.text}\n\n[Horário: {message_date}]"
+                    )
                     ##############################################
 
                     try:

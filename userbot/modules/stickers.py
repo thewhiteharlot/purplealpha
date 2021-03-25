@@ -36,7 +36,7 @@ KANGING_STR = [
     "Simsalabim, passe esse sticker para mim.",
     "Sticker capturado com sucesso...",
     "Sr. RoubaSticker roubando seu sticker... ",
-    "Estamos a `0` dias sem roubar stickers, o recorde atual é: `0` dias."
+    "Estamos a `0` dias sem roubar stickers, o recorde atual é: `0` dias.",
 ]
 
 
@@ -288,7 +288,9 @@ async def get_pack_info(event):
 
     rep_msg = await event.get_reply_message()
     if not rep_msg.document:
-        return await event.edit("**Responda a um sticker para obter os detalhes do pacote.**")
+        return await event.edit(
+            "**Responda a um sticker para obter os detalhes do pacote.**"
+        )
 
     try:
         stickerset_attr = rep_msg.document.attributes[1]

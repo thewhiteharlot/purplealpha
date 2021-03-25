@@ -37,7 +37,9 @@ async def who(event):
     try:
         photo, caption = await fetch_info(replied_user, event)
     except AttributeError:
-        return await event.edit("**Não foi possível buscar as informações deste usuário.**")
+        return await event.edit(
+            "**Não foi possível buscar as informações deste usuário.**"
+        )
 
     message_id_to_reply = event.message.reply_to_msg_id
 
@@ -135,7 +137,9 @@ async def fetch_info(replied_user, event):
         else ("Este usuário não tem nome")
     )
     last_name = (
-        last_name.replace("\u2060", "") if last_name else ("Este usuário não tem sobrenome")
+        last_name.replace("\u2060", "")
+        if last_name
+        else ("Este usuário não tem sobrenome")
     )
     username = f"@{username}" if username else ("Este usuário não tem nome de usuário")
     user_bio = "Este usuário não tem uma bio" if not user_bio else user_bio

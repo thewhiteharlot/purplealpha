@@ -44,7 +44,9 @@ async def unblacklist(event):
 
     group_id = event.pattern_match.group(1)
     if not group_id:
-        return await event.edit("**Forneça um ID de bate-papo para remover da lista negra!**")
+        return await event.edit(
+            "**Forneça um ID de bate-papo para remover da lista negra!**"
+        )
 
     if group_id == "all":
         from userbot.modules.sql_helper.blacklist_sql import del_blacklist_all
@@ -74,7 +76,9 @@ async def list_blacklist(event):
 
     chat_list = get_blacklist()
     if not chat_list:
-        return await event.edit("**Você ainda não colocou nenhum bate-papo na lista negra!**")
+        return await event.edit(
+            "**Você ainda não colocou nenhum bate-papo na lista negra!**"
+        )
 
     msg = "**Bate-papos na lista negra:**\n\n"
 
@@ -83,7 +87,9 @@ async def list_blacklist(event):
             chat = await event.client.get_entity(int(i.chat_id))
             chat = f"{chat.title} | `{i.chat_id}`"
         except (TypeError, ValueError):
-            chat = f"__Não foi possível buscar informações do bate-papo__ | `{i.chat_id}`"
+            chat = (
+                f"__Não foi possível buscar informações do bate-papo__ | `{i.chat_id}`"
+            )
 
         msg += f"• {chat}\n"
 

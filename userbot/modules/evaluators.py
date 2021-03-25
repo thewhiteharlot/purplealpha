@@ -139,7 +139,9 @@ async def terminal_runner(event):
     command = event.pattern_match.group(1)
 
     if event.is_channel and not event.is_group:
-        return await event.edit("**Comandos de terminal não são permitidos em canais!**")
+        return await event.edit(
+            "**Comandos de terminal não são permitidos em canais!**"
+        )
 
     if not command:
         return await event.edit("**Dê um comando ou use .help term para exemplos.**")

@@ -66,8 +66,7 @@ async def okgoogle(img):
         return await img.edit("**Erro do Google.**")
 
     await img.edit(
-        "**Imagem carregada com sucesso para o Google.**"
-        "\n**Analisando fonte agora**"
+        "**Imagem carregada com sucesso para o Google.**" "\n**Analisando fonte agora**"
     )
     os.remove(name)
     match = await ParseSauce(fetchUrl + "&preferences?hl=en&fg=1#languages")

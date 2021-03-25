@@ -144,7 +144,9 @@ async def generate_credentials(gdrive):
         configs, SCOPES, redirect_uri=REDIRECT_URI
     )
     auth_url, _ = flow.authorization_url(access_type="offline", prompt="consent")
-    msg = await gdrive.respond("`Vá para o seu grupo BOTLOG para autenticar o token...`")
+    msg = await gdrive.respond(
+        "`Vá para o seu grupo BOTLOG para autenticar o token...`"
+    )
     async with gdrive.client.conversation(BOTLOG_CHATID) as conv:
         url_msg = await conv.send_message(
             "Por favor, vá para este URL:\n" f"{auth_url}\nautorize e responda o código"
@@ -324,9 +326,7 @@ async def download(gdrive, service, uri=None):
                 return reply
     except Exception as e:
         status = status.replace("DOWNLOAD]", "ERRO]")
-        reply += (
-            f"`{status}`\n\n" "`Status` : **falha**\n" f"`Motivo` : `{str(e)}`\n\n"
-        )
+        reply += f"`{status}`\n\n" "`Status` : **falha**\n" f"`Motivo` : `{str(e)}`\n\n"
         return reply
     return
 
@@ -804,7 +804,8 @@ async def lists(gdrive):
         )
     else:
         await gdrive.edit(
-            "**Consulta do Google Drive**:\n" f"`{query}`\n\n**Resultados**\n\n{message}"
+            "**Consulta do Google Drive**:\n"
+            f"`{query}`\n\n**Resultados**\n\n{message}"
         )
     return
 
@@ -1120,7 +1121,8 @@ async def google_drive(gdrive):
         result = await upload(gdrive, service, file_path, file_name, mimeType)
     except CancelProcess:
         gdrive.respond(
-            "`[ARQUIVO - CANCELADO]`\n\n" "`Status` : **OK** - sinal recebido cancelado."
+            "`[ARQUIVO - CANCELADO]`\n\n"
+            "`Status` : **OK** - sinal recebido cancelado."
         )
     if result:
         await gdrive.respond(
@@ -1153,7 +1155,8 @@ async def set_upload_folder(gdrive):
             del parent_Id
         except NameError:
             await gdrive.edit(
-                "`[PASTA - DEFINIR]`\n\n" "`Status` : **RUIM** - Nenhum parent_Id está definido."
+                "`[PASTA - DEFINIR]`\n\n"
+                "`Status` : **RUIM** - Nenhum parent_Id está definido."
             )
             return False
         else:
@@ -1187,7 +1190,8 @@ async def set_upload_folder(gdrive):
     else:
         if "uc?id=" in ext_id:
             await gdrive.edit(
-                "`[URL - ERRO]`\n\n" "`Status` : **RUIM** - Não é um URL válido de pasta."
+                "`[URL - ERRO]`\n\n"
+                "`Status` : **RUIM** - Não é um URL válido de pasta."
             )
             return None
         try:

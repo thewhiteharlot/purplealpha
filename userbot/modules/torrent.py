@@ -18,9 +18,13 @@ async def torrent(event):
     try:
         ts = json.loads(response.text)
     except json.decoder.JSONDecodeError:
-        return await event.edit("**Erro: API está inativa agora, tente novamente mais tarde.**")
+        return await event.edit(
+            "**Erro: API está inativa agora, tente novamente mais tarde.**"
+        )
     if ts != response.json():
-        return await event.edit("**Erro: API está inativa agora, tente novamente mais tarde.**")
+        return await event.edit(
+            "**Erro: API está inativa agora, tente novamente mais tarde.**"
+        )
     listdata = ""
     run = 0
     while True:
@@ -50,5 +54,8 @@ async def torrent(event):
 
 
 CMD_HELP.update(
-    {"torrent": ">`.ts` <consulta>" "\n**Uso:** Pesquisa por torrents de determinada consulta"}
+    {
+        "torrent": ">`.ts` <consulta>"
+        "\n**Uso:** Pesquisa por torrents de determinada consulta"
+    }
 )

@@ -340,7 +340,9 @@ async def uptobox(request, url: str) -> str:
             if status == "Waiting needed":
                 wait = result.get("data").get("waiting")
                 waitingToken = result.get("data").get("waitingToken")
-                await request.edit(f"**Esperando por cerca de {time_formatter(wait)}...**")
+                await request.edit(
+                    f"**Esperando por cerca de {time_formatter(wait)}...**"
+                )
                 # for some reason it doesn't go as i planned
                 # so make it 1 minute just to be save enough
                 await asyncio.sleep(wait + 60)

@@ -620,9 +620,7 @@ async def get_users(show):
     try:
         await show.edit(mentions)
     except MessageTooLongError:
-        await show.edit(
-            "**Carregando lista de usuários como arquivo...**"
-        )
+        await show.edit("**Carregando lista de usuários como arquivo...**")
         with open("userslist.txt", "w+") as file:
             file.write(mentions)
         await show.client.send_file(
@@ -651,7 +649,9 @@ async def get_user_from_event(event):
             user = int(user)
 
         if not user:
-            return await event.edit("**Envie o nome de usuário, ID ou responda ao usuário!**")
+            return await event.edit(
+                "**Envie o nome de usuário, ID ou responda ao usuário!**"
+            )
 
         if event.message.entities is not None:
             probable_user_mention_entity = event.message.entities[0]
@@ -711,9 +711,7 @@ async def get_usersdel(show):
     try:
         await show.edit(mentions)
     except MessageTooLongError:
-        await show.edit(
-            "**Carregando lista de usuários excluídos como arquivo...**"
-        )
+        await show.edit("**Carregando lista de usuários excluídos como arquivo...**")
         with open("deleteduserslist.txt", "w+") as file:
             file.write(mentions)
         await show.client.send_file(

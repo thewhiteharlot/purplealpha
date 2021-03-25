@@ -104,7 +104,8 @@ async def selfdestruct(destroy):
 
 CMD_HELP.update(
     {
-        "purge": ">`.purge`" "\n**Uso:** Limpa todas as mensagens a partir da resposta.",
+        "purge": ">`.purge`"
+        "\n**Uso:** Limpa todas as mensagens a partir da resposta.",
         "purgeme": ">`.purgeme <x>`"
         "\n**Uso:** Exclui x quantidade de suas mensagens mais recentes.",
         "del": ">`.del`" "\n**Uso:** Exclui a mensagem que você respondeu.",

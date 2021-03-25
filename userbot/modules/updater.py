@@ -38,7 +38,9 @@ async def print_changelogs(event, ac_br, changelog):
         f"**Atualizações disponíveis em {ac_br} !\n\nMudanças:**\n`{changelog}`"
     )
     if len(changelog_str) > 4096:
-        await event.edit("**O registro de alterações é muito grande, enviando como um arquivo.**")
+        await event.edit(
+            "**O registro de alterações é muito grande, enviando como um arquivo.**"
+        )
         with open("output.txt", "w+") as file:
             file.write(changelog_str)
         await event.client.send_file(event.chat_id, "output.txt")
@@ -68,7 +70,8 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
                 break
         if heroku_app is None:
             await event.edit(
-                f"{txt}\n" "**Credenciais do Heroku inválidas para atualizar os dynos do userbot.**"
+                f"{txt}\n"
+                "**Credenciais do Heroku inválidas para atualizar os dynos do userbot.**"
             )
             return repo.__del__()
         ups_rem.fetch(ac_br)
@@ -88,7 +91,9 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
             return repo.__del__()
         build = app.builds(order_by="created_at", sort="desc")[0]
         if build.status == "failed":
-            await event.edit("**Erro na atualização!**\nCancelada ou ocorreram alguns erros.`")
+            await event.edit(
+                "**Erro na atualização!**\nCancelada ou ocorreram alguns erros.`"
+            )
             await asyncio.sleep(5)
             return await event.delete()
         await event.edit(
@@ -170,9 +175,7 @@ async def upstream(event):
         return
 
     if changelog == "" and not force_update:
-        await event.edit(
-            f"Seu userbot está **atualizado** !"
-        )
+        await event.edit(f"Seu userbot está **atualizado** !")
         return repo.__del__()
 
     if conf == "" and not force_update:

@@ -39,7 +39,9 @@ async def memify(event):
         await runcmd(cmd)
         os.remove(input_file)
         if not os.path.lexists(converted_file):
-            return await event.edit("**Não foi possível analisar este sticker animado.**")
+            return await event.edit(
+                "**Não foi possível analisar este sticker animado.**"
+            )
         input_file = converted_file
 
     elif input_file.endswith(".mp4"):

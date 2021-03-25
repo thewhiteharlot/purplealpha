@@ -233,7 +233,9 @@ async def approvepm(apprvpm):
     except IntegrityError:
         return await apprvpm.edit("**O usuário talvez já esteja aprovado.**")
 
-    await apprvpm.edit(f"[{name0}](tg://user?id={uid}) **permitido mandar mensagens privadas!**")
+    await apprvpm.edit(
+        f"[{name0}](tg://user?id={uid}) **permitido mandar mensagens privadas!**"
+    )
 
     if BOTLOG:
         await apprvpm.client.send_message(
@@ -284,7 +286,9 @@ async def disapprovepm(disapprvpm):
         name0 = str(aname.first_name)
         aname = aname.id
 
-    await disapprvpm.edit(f"[{name0}](tg://user?id={aname}) **proibido de enviar mensagens privadas!**")
+    await disapprvpm.edit(
+        f"[{name0}](tg://user?id={aname}) **proibido de enviar mensagens privadas!**"
+    )
 
     if BOTLOG:
         await disapprvpm.client.send_message(
@@ -386,7 +390,9 @@ async def add_pmsg(cust_msg):
 
     if conf.lower() == "reset":
         if custom_message is None:
-            await cust_msg.edit("**Você ainda não definiu uma mensagem PMPermit personalizada.**")
+            await cust_msg.edit(
+                "**Você ainda não definiu uma mensagem PMPermit personalizada.**"
+            )
 
         else:
             sql.delgvar("unapproved_msg")

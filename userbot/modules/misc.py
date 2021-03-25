@@ -27,7 +27,11 @@ async def randomise(items):
         )
     index = randint(1, len(itemo) - 1)
     await items.edit(
-        "**Consulta: **\n`" + items.text[8:] + "`\n**Resultado: **\n`" + itemo[index] + "`"
+        "**Consulta: **\n`"
+        + items.text[8:]
+        + "`\n**Resultado: **\n`"
+        + itemo[index]
+        + "`"
     )
 
 
@@ -125,7 +129,9 @@ async def raw(event):
                 reply_to=reply_to_id,
                 caption="**Aqui estão os dados da mensagem decodificada!**",
             )
-            await event.edit("**Verifique o grupo de botlog para os dados da mensagem decodificada.**")
+            await event.edit(
+                "**Verifique o grupo de botlog para os dados da mensagem decodificada.**"
+            )
         except:
             await event.edit("**Este recurso precisa do BOTLOG_CHATID definido.**")
 

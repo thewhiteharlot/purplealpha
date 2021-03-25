@@ -31,7 +31,9 @@ async def impostor(event):
     elif event.reply_to_msg_id:
         replyMessage = await event.get_reply_message()
         if replyMessage.sender_id is None:
-            return await event.edit("**Não é possível se passar por administradores anônimos, sed.**")
+            return await event.edit(
+                "**Não é possível se passar por administradores anônimos, sed.**"
+            )
         userObj = await event.client(GetFullUserRequest(replyMessage.sender_id))
     else:
         return await event.edit(

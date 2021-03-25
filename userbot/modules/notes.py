@@ -129,7 +129,9 @@ async def kick_marie_notes(kick):
             i = i.replace("**", "")
             await kick.reply("/clear %s" % (i.strip()))
         await sleep(0.3)
-    await kick.respond("**Notas de bots removidas com sucesso yaay!**\n Me dê biscoitos!")
+    await kick.respond(
+        "**Notas de bots removidas com sucesso yaay!**\n Me dê biscoitos!"
+    )
     if BOTLOG:
         await kick.client.send_message(
             BOTLOG_CHATID, "Limpei todas as notas em " + str(kick.chat_id)
