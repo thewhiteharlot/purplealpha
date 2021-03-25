@@ -1,26 +1,23 @@
 # Copyright (C) 2019 The Raphielscape Company LLC.
 #
-# Licensed under the Raphielscape Public License, Version 1.d (the "License");
-# Copyright (C) 2019 The Raphielscape Company LLC.
-#
 # Licensed under the Raphielscape Public License, Version 1.c (the "License");
 # you may not use this file except in compliance with the License.
 #
 """ Userbot initialization. """
 
 import os
-import re
-import time
+import sys
 from distutils.util import strtobool as sb
 from logging import DEBUG, INFO, basicConfig, getLogger
 from pathlib import Path
-from sys import version_info
+from platform import python_version
 
 from dotenv import load_dotenv
 from pylast import LastFMNetwork, md5
 from pySmartDL import SmartDL
 from requests import get
-from telethon import TelegramClient
+from telethon import TelegramClient, version
+from telethon.network.connection.tcpabridged import ConnectionTcpAbridged
 from telethon.sessions import StringSession
 
 from .storage import Storage
@@ -28,8 +25,6 @@ from .storage import Storage
 STORAGE = lambda n: Storage(Path("data") / n)
 
 load_dotenv("config.env")
-
-StartTime = time.time()
 
 # Bot Logs setup:
 CONSOLE_LOGGER_VERBOSE = sb(os.environ.get("CONSOLE_LOGGER_VERBOSE") or "False")
@@ -45,35 +40,31 @@ else:
     )
 LOGS = getLogger(__name__)
 
-if version_info[0] < 3 or version_info[1] < 8:
+if sys.version_info[0] < 3 or sys.version_info[1] < 8:
     LOGS.info(
         "Você DEVE ter uma versão python de pelo menos 3.8."
-        "Vários recursos dependem disso. Finalizando serviços."
+        "Vários recursos dependem disso. Bot finalizando."
     )
-    quit(1)
+    sys.exit(1)
 
 # Check if the config was edited by using the already used variable.
 # Basically, its the 'virginity check' for the config file ;)
 CONFIG_CHECK = (
-    os.environ.get("___________REMOVA__ISSO___________") or None
+    os.environ.get("___________PLOX_______REMOVE_____THIS_____LINE__________") or None
 )
 
 if CONFIG_CHECK:
     LOGS.info(
         "Remova a linha mencionada na primeira hashtag do arquivo config.env"
     )
-    quit(1)
+    sys.exit(1)
 
 # Telegram App KEY and HASH
-API_KEY = os.environ.get("API_KEY") or None
-API_HASH = os.environ.get("API_HASH") or None
-
+API_KEY = int(os.environ.get("API_KEY") or 0)
+API_HASH = str(os.environ.get("API_HASH") or None)
 
 # Userbot Session String
 STRING_SESSION = os.environ.get("STRING_SESSION") or None
-
-# Deezloader
-DEEZER_ARL_TOKEN = os.environ.get("DEEZER_ARL_TOKEN") or None
 
 # Logging channel/group ID configuration.
 BOTLOG_CHATID = int(os.environ.get("BOTLOG_CHATID") or 0)
@@ -86,28 +77,27 @@ LOGSPAMMER = sb(os.environ.get("LOGSPAMMER") or "False")
 PM_AUTO_BAN = sb(os.environ.get("PM_AUTO_BAN") or "False")
 
 # Heroku Credentials for updater.
-HEROKU_MEMEZ = sb(os.environ.get("HEROKU_MEMEZ") or "False")
 HEROKU_APP_NAME = os.environ.get("HEROKU_APP_NAME") or None
 HEROKU_API_KEY = os.environ.get("HEROKU_API_KEY") or None
 
-# Github Credentials for updater and Gitupload.
-GIT_REPO_NAME = os.environ.get("GIT_REPO_NAME") or None
-GITHUB_ACCESS_TOKEN = os.environ.get("GITHUB_ACCESS_TOKEN") or None
-
 # Custom (forked) repo URL and BRANCH for updater.
-UPSTREAM_REPO_URL = (os.environ.get("UPSTREAM_REPO_URL")
-                     or "https://github.com/thewhiteharlot/purplealpha.git")
-UPSTREAM_REPO_BRANCH = os.environ.get("UPSTREAM_REPO_BRANCH") or "purplealpha"
+UPSTREAM_REPO_URL = "https://github.com/thewhiteharlot/PurpleBotKEN.git"
+UPSTREAM_REPO_BRANCH = "master"
 
 # Console verbose logging
-CONSOLE_LOGGER_VERBOSE = sb(
-    os.environ.get("CONSOLE_LOGGER_VERBOSE") or "False")
+CONSOLE_LOGGER_VERBOSE = sb(os.environ.get("CONSOLE_LOGGER_VERBOSE") or "False")
 
 # SQL Database URI
 DB_URI = os.environ.get("DATABASE_URL") or None
 
 # OCR API key
 OCR_SPACE_API_KEY = os.environ.get("OCR_SPACE_API_KEY") or None
+
+# Default .alive name
+ALIVE_NAME = str(os.environ.get("ALIVE_NAME")) or None
+
+# Default .alive logo
+ALIVE_LOGO = os.environ.get("ALIVE_LOGO") or None
 
 # remove.bg API key
 REM_BG_API_KEY = os.environ.get("REM_BG_API_KEY") or None
@@ -119,42 +109,23 @@ GOOGLE_CHROME_BIN = os.environ.get("GOOGLE_CHROME_BIN") or None
 # OpenWeatherMap API Key
 OPEN_WEATHER_MAP_APPID = os.environ.get("OPEN_WEATHER_MAP_APPID") or None
 WEATHER_DEFCITY = os.environ.get("WEATHER_DEFCITY") or None
-WEATHER_DEFLANG = os.environ.get("WEATHER_DEFLANG") or None
-
-# Genius lyrics API
-GENIUS = os.environ.get("GENIUS_ACCESS_TOKEN") or None
-
-# Wolfram Alpha API
-WOLFRAM_ID = os.environ.get("WOLFRAM_ID") or None
 
 # Anti Spambot Config
 ANTI_SPAMBOT = sb(os.environ.get("ANTI_SPAMBOT") or "False")
 ANTI_SPAMBOT_SHOUT = sb(os.environ.get("ANTI_SPAMBOT_SHOUT") or "False")
 
 # Default .alive name
-ALIVE_NAME = str(os.environ.get("ALIVE_NAME")) or None
-
-# Default .alive logo
-ALIVE_LOGO = os.environ.get("ALIVE_LOGO") or None
+ALIVE_NAME = os.environ.get("ALIVE_NAME") or None
 
 # Time & Date - Country and Time Zone
 COUNTRY = str(os.environ.get("COUNTRY") or "")
 TZ_NUMBER = int(os.environ.get("TZ_NUMBER") or 1)
 
-# Version of PurpleBot
-USERBOT_VERSION = os.environ.get("USERBOT_VERSION") or "4x-Alpha"
-
-# User Terminal alias
-USER_TERM_ALIAS = os.environ.get("USER_TERM_ALIAS") or "Purple [alpha]"
-
-# Updater alias
-UPDATER_ALIAS = os.environ.get("UPDATER_ALIAS") or "Purple [alpha]"
-
 # Zipfile module
 ZIP_DOWNLOAD_DIRECTORY = os.environ.get("ZIP_DOWNLOAD_DIRECTORY") or "./zips"
 
 # Clean Welcome
-CLEAN_WELCOME = sb(os.environ.get("CLEAN_WELCOME") or "True")
+CLEAN_WELCOME = sb(os.environ.get("CLEAN_WELCOME") or "False")
 
 # Last.fm Module
 BIO_PREFIX = os.environ.get("BIO_PREFIX") or None
@@ -186,29 +157,29 @@ TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY") or "./downloa
 # Terminal Alias
 TERM_ALIAS = os.environ.get("TERM_ALIAS") or None
 
+# Deezloader
+DEEZER_ARL_TOKEN = os.environ.get("DEEZER_ARL_TOKEN") or None
+
+# Genius Lyrics API
+GENIUS = os.environ.get("GENIUS_ACCESS_TOKEN") or None
+
 # Uptobox
-USR_TOKEN = os.environ.get("USR_TOKEN_UPTOBOX", None)
+USR_TOKEN = os.environ.get("USR_TOKEN_UPTOBOX") or None
 
-
-# Setting Up CloudMail.ru and MEGA.nz extractor binaries,
-# and giving them correct perms to work properly.
-if not os.path.exists("bin"):
-    os.mkdir("bin")
-
-binaries = {
-    "https://raw.githubusercontent.com/adekmaulana/megadown/master/megadown": "bin/megadown",
-    "https://raw.githubusercontent.com/yshalsager/cmrudl.py/master/cmrudl.py": "bin/cmrudl",
-}
-
-for binary, path in binaries.items():
-    downloader = SmartDL(binary, path, progress_bar=False)
-    downloader.start()
-    os.chmod(path, 0o755)
+# PurpleBot version
+PURPLEBOT_VERSION = "5.0"
 
 # 'bot' variable
 if STRING_SESSION:
     # pylint: disable=invalid-name
-    bot = TelegramClient(StringSession(STRING_SESSION), API_KEY, API_HASH)
+    bot = TelegramClient(
+        session=StringSession(STRING_SESSION),
+        api_id=API_KEY,
+        api_hash=API_HASH,
+        connection=ConnectionTcpAbridged,
+        auto_reconnect=True,
+        connection_retries=-1,
+    )
 else:
     # pylint: disable=invalid-name
     bot = TelegramClient("userbot", API_KEY, API_HASH)
@@ -217,15 +188,15 @@ else:
 async def check_botlog_chatid():
     if not BOTLOG_CHATID and LOGSPAMMER:
         LOGS.info(
-            "You must set up the BOTLOG_CHATID variable in the config.env or environment variables, for the private error log storage to work."
+            "Você deve configurar a variável BOTLOG_CHATID nas variáveis config.env, para que o registro dos logs de erro funcione."
         )
-        quit(1)
+        sys.exit(1)
 
     elif not BOTLOG_CHATID and BOTLOG:
         LOGS.info(
-            "You must set up the BOTLOG_CHATID variable in the config.env or environment variables, for the userbot logging feature to work."
+            "Você deve configurar a variável BOTLOG_CHATID nas variáveis config.env, para que o recurso de registro do userbot funcione."
         )
-        quit(1)
+        sys.exit(1)
 
     elif not (BOTLOG and LOGSPAMMER):
         return
@@ -233,10 +204,10 @@ async def check_botlog_chatid():
     entity = await bot.get_entity(BOTLOG_CHATID)
     if entity.default_banned_rights.send_messages:
         LOGS.info(
-            "Your account doesn't have rights to send messages to BOTLOG_CHATID "
-            "group. Check if you typed the Chat ID correctly."
+            "Sua conta não tem permissão para enviar mensagens para BOTLOG_CHATID. "
+            " Verifique se você digitou o ID do bate-papo corretamente."
         )
-        quit(1)
+        sys.exit(1)
 
 
 with bot:
@@ -244,10 +215,31 @@ with bot:
         bot.loop.run_until_complete(check_botlog_chatid())
     except BaseException:
         LOGS.info(
-            "BOTLOG_CHATID environment variable isn't a "
-            "valid entity. Check your environment variables/config.env file."
+            "BOTLOG_CHATID não é uma variável válida "
+            " Verifique suas VARS ou arquivo config.env."
         )
-        quit(1)
+        sys.exit(1)
+
+
+async def send_alive_status():
+    if BOTLOG_CHATID and LOGSPAMMER:
+        DEFAULTUSER = ALIVE_NAME or "Defina a ConfigVar `ALIVE_NAME`!"
+        message = (
+            f"👾 **PurpleBot**   ➡️  `{PURPLEBOT_VERSION}` \n"
+            f"⚙️ **Telethon**      ➡️  `{version.__version__}` \n"
+            f"🐍 **Python**         ➡️  `{python_version()}` \n"
+            f"👤 **Usuário**       ➡️   `{DEFAULTUSER}` "
+            "\n\n__Userbot iniciado__ ☑️"
+        )
+        await bot.send_message(BOTLOG_CHATID, message)
+        return True
+
+
+with bot:
+    try:
+        bot.loop.run_until_complete(send_alive_status())
+    except:
+        pass
 
 # Global Variables
 COUNT_MSG = 0
@@ -255,6 +247,5 @@ USERS = {}
 COUNT_PM = {}
 LASTMSG = {}
 CMD_HELP = {}
-ZALG_LIST = {}
 ISAFK = False
 AFKREASON = None

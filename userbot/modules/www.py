@@ -1,6 +1,6 @@
 # Copyright (C) 2019 The Raphielscape Company LLC.
 #
-# Licensed under the Raphielscape Public License, Version 1.d (the "License");
+# Licensed under the Raphielscape Public License, Version 1.c (the "License");
 # you may not use this file except in compliance with the License.
 #
 """ Userbot module containing commands related to the \
@@ -15,7 +15,7 @@ from userbot import CMD_HELP
 from userbot.events import register
 
 
-@register(outgoing=True, pattern="^.speed$")
+@register(outgoing=True, pattern=r"^\.speed$")
 async def speedtst(spd):
     """ For .speed command, use SpeedTest to check server speeds. """
     await spd.edit("`Executando teste de velocidade . . .`")
@@ -56,7 +56,7 @@ def speed_convert(size):
     return f"{round(size, 2)} {units[zero]}"
 
 
-@register(outgoing=True, pattern="^.dc$")
+@register(outgoing=True, pattern=r"^\.dc$")
 async def neardc(event):
     """ For .dc command, get the nearest datacenter information. """
     result = await event.client(functions.help.GetNearestDcRequest())
@@ -67,31 +67,20 @@ async def neardc(event):
     )
 
 
-@register(outgoing=True, pattern="^.ping$")
-async def pingme(pong):
+@register(outgoing=True, pattern=r"^\.ping$")
+async def pingme(event):
     """ For .ping command, ping the userbot from any chat.  """
     start = datetime.now()
-    await pong.edit("`Pong!`")
+    await event.edit("**Pong!**")
     end = datetime.now()
     duration = (end - start).microseconds / 1000
-    await pong.edit("`Pong!\n%sms`" % (duration))
+    await event.edit("**Pong!\n%sms**" % (duration))
 
 
 CMD_HELP.update(
     {
-        "speed": ".speed\
-    \nUso: Faz um teste de velocidade e mostra os resultados."
-    }
-)
-CMD_HELP.update(
-    {
-        "dc": ".dc\
-    \nUso: Encontra o datacenter mais próximo de seu servidor."
-    }
-)
-CMD_HELP.update(
-    {
-        "ping": ".ping\
-    \nUso: Mostra quanto tempo leva para um pacote retornar ao seu bot."
+        "speed": ">`.speed`" "\n**Uso:** Faz um teste de velocidade e mostra os resultados.",
+        "dc": ">`.dc`" "\n**Uso:** Encontra o datacenter mais próximo de seu servidor.",
+        "ping": ">`.ping`" "\n**Uso:** Mostra quanto tempo leva para pingar seu bot.",
     }
 )

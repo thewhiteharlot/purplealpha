@@ -6,7 +6,7 @@ import asyncio
 import os
 import shlex
 import textwrap
-from typing import Optional, Tuple
+from typing import Optional
 
 from PIL import Image, ImageDraw, ImageFont
 
@@ -39,9 +39,7 @@ async def memify(event):
         await runcmd(cmd)
         os.remove(input_file)
         if not os.path.lexists(converted_file):
-            return await event.edit(
-                "**Não foi possível analisar este sticker animado.**"
-            )
+            return await event.edit("**Não foi possível analisar este sticker animado.**")
         input_file = converted_file
 
     elif input_file.endswith(".mp4"):
@@ -50,7 +48,7 @@ async def memify(event):
         await take_screen_shot(input_file, 0, converted_file)
         os.remove(input_file)
         if not os.path.lexists(converted_file):
-            return await event.edit("**Não foi possível analisar este vídeo.**")
+            return await event.edit("**Não foi possível analisar este video.**")
         input_file = converted_file
 
     await event.edit("**Adicionando texto...**")
@@ -124,7 +122,7 @@ async def add_text_img(image_path, text):
     return final_image
 
 
-async def runcmd(cmd: str) -> Tuple[str, str, int, int]:
+async def runcmd(cmd: str) -> tuple[str, str, int, int]:
     """ run command in terminal """
     args = shlex.split(cmd)
     process = await asyncio.create_subprocess_exec(
@@ -154,8 +152,8 @@ async def take_screen_shot(
 
 CMD_HELP.update(
     {
-        "memify": ">`.mmf <texto de cima>;<texto de baixo>`"
-        "\nUso: Responda a uma imagem/sticker/gif/vídeo para adicionar texto a ele."
+        "memify": ">`.mmf <top text>;<bottom text>`"
+        "\n**Uso:** Responda a uma imagem/sticker/gif/vídeo para adicionar texto a ele."
         "\nSe for um vídeo, o texto será adicionado ao primeiro quadro."
     }
 )

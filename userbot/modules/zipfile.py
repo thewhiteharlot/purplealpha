@@ -3,7 +3,7 @@
 # Licensed under the Raphielscape Public License, Version 1.d (the "License");
 # you may not use this file except in compliance with the License.
 #
-# Port from UniBorg to Userbot by yincen17
+# Port from UniBorg by yincen17
 
 import asyncio
 import os
@@ -24,14 +24,14 @@ today = date.today()
 async def _(event):
     # Prevent Channel Bug to use update
     if event.is_channel and not event.is_group:
-        await event.edit("`Comando de compressão não é permitido em canais`")
+        await event.edit("**Comando não é permitido em canais.**")
         return
     if event.fwd_from:
         return
     if not event.is_reply:
-        await event.edit("`Responda a um arquivo para compactá-lo.`")
+        await event.edit("**Responda a um arquivo para compactá-lo.**")
         return
-    mone = await event.edit("`Processando...`")
+    mone = await event.edit("**Processando...**")
     if not os.path.isdir(TEMP_DOWNLOAD_DIRECTORY):
         os.makedirs(TEMP_DOWNLOAD_DIRECTORY)
     if event.reply_to_msg_id:
@@ -42,12 +42,12 @@ async def _(event):
                 reply_message,
                 TEMP_DOWNLOAD_DIRECTORY,
                 progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                    progress(d, t, mone, c_time, "[DOWNLOADING]")
+                    progress(d, t, mone, c_time, "Zip - Download")
                 ),
             )
             directory_name = downloaded_file_name
             await event.edit(
-                f"Baixado para `{directory_name}`" "`\ncompactando arquivo...`"
+                f"Baixado para `{directory_name}`" "\nCompactando arquivo..."
             )
         except Exception as e:  # pylint:disable=C0103,W0703
             await mone.edit(str(e))
@@ -62,10 +62,10 @@ async def _(event):
         allow_cache=False,
         reply_to=event.message.id,
         progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-            progress(d, t, mone, c_time, "[UPLOADING]")
+            progress(d, t, mone, c_time, "Zip - Upload")
         ),
     )
-    await event.edit("`Feito!!`")
+    await event.edit("**Feito!**")
     await asyncio.sleep(7)
     await event.delete()
 
@@ -75,14 +75,14 @@ async def addzip(add):
     """ Copyright (c) 2020 azrim @github"""
     # Prevent Channel Bug to use update
     if add.is_channel and not add.is_group:
-        await add.edit("`O comando não é permitido em canais`")
+        await add.edit("**Comando não é permitido em canais.**")
         return
     if add.fwd_from:
         return
     if not add.is_reply:
-        await add.edit("`Responda a um arquivo para compactá-lo.`")
+        await add.edit("**Responda a um arquivo para compactá-lo.**")
         return
-    mone = await add.edit("`Processando...`")
+    mone = await add.edit("**Processando...**")
     if not os.path.isdir(ZIP_DOWNLOAD_DIRECTORY):
         os.makedirs(ZIP_DOWNLOAD_DIRECTORY)
     if add.reply_to_msg_id:
@@ -93,11 +93,11 @@ async def addzip(add):
                 reply_message,
                 ZIP_DOWNLOAD_DIRECTORY,
                 progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                    progress(d, t, mone, c_time, "[DOWNLOADING]")
+                    progress(d, t, mone, c_time, "Zip - Download")
                 ),
             )
             success = str(downloaded_file_name).replace("./zips/", "")
-            await add.edit(f"`{success} Adicionado com sucesso à lista`")
+            await add.edit(f"`{success}` adicionado com sucesso à lista.")
         except Exception as e:  # pylint:disable=C0103,W0703
             await mone.edit(str(e))
             return
@@ -106,9 +106,9 @@ async def addzip(add):
 @register(outgoing=True, pattern=r"^\.upzip(?: |$)(.*)")
 async def upload_zip(up):
     if not os.path.isdir(ZIP_DOWNLOAD_DIRECTORY):
-        await up.edit("`Arquivos não encontrados`")
+        await up.edit("**Arquivo não encontrado.**")
         return
-    mone = await up.edit("`Compactando Arquivo...`")
+    mone = await up.edit("**Compactando arquivo...**")
     input_str = up.pattern_match.group(1)
     curdate = today.strftime("%m%d%y")
     title = str(input_str) if input_str else "zipfile" + f"{curdate}"
@@ -123,7 +123,7 @@ async def upload_zip(up):
         allow_cache=False,
         reply_to=up.message.id,
         progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-            progress(d, t, mone, c_time, "[UPLOADING]", input_str)
+            progress(d, t, mone, c_time, "Zip - Upload", input_str)
         ),
     )
     os.rmdir(ZIP_DOWNLOAD_DIRECTORY)
@@ -133,15 +133,15 @@ async def upload_zip(up):
 @register(outgoing=True, pattern=r"^\.rmzip(?: |$)(.*)")
 async def remove_dir(rm):
     if not os.path.isdir(ZIP_DOWNLOAD_DIRECTORY):
-        await rm.edit("`Diretório não encontrado`")
+        await rm.edit("**Diretório não encontrado.**")
         return
     os.rmdir(ZIP_DOWNLOAD_DIRECTORY)
-    await rm.edit("`Lista zip removida`")
+    await rm.edit("**Lista zip removida.**")
 
 
 def zipdir(path, ziph):
     # ziph is zipfile handle
-    for root, dirs, files in os.walk(path):
+    for root, _, files in os.walk(path):
         for file in files:
             ziph.write(os.path.join(root, file))
             os.remove(os.path.join(root, file))
@@ -149,13 +149,13 @@ def zipdir(path, ziph):
 
 CMD_HELP.update(
     {
-        "zipfile": ".compress **[opcional: <responder ao arquivo>]**\
-            \nUso: para compactar arquivos.\
-            \n.addzip **<responder ao arquivo>**\
-            \nUso: adicionar arquivos à lista zip.\
-            \n.upzip **[opcional: <título zip>]**\
-            \nUso: carregar lista zip.\
-            \n.rmzip **[opcional: <título zip>]**\
-            \nUso: limpar lista zip."
+        "zipfile": "`.compress` [opcional: <responder ao arquivo >]"
+        "\n**Uso:** compactar arquivos."
+        "\n\n`.addzip` <responder ao arquivo>"
+        "\n**Uso:** adicionar arquivos à lista zip."
+        "\n\n`.upzip` [opcional: <título zip>]"
+        "\n**Uso:** fazer upload da lista zip."
+        "\n\n`.rmzip` [opcional: <título zip>]"
+        "\n**Uso:** limpar a lista zip."
     }
 )

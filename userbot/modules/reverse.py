@@ -38,19 +38,19 @@ async def okgoogle(img):
     message = await img.get_reply_message()
 
     if not message or not message.media:
-        return await img.edit("**Responda a uma foto ou sticker.**")
+        return await img.edit("**Responda a uma foto ou adesivo.**")
 
     photo = io.BytesIO()
     await bot.download_media(message, photo)
     if not photo:
         return await img.edit("**Não foi possível baixar a imagem.**")
 
-    await img.edit("**Processing...**")
+    await img.edit("**Processando...**")
 
     try:
         image = Image.open(photo)
     except OSError:
-        return await img.edit("**Ocorreu um erro.**")
+        return await img.edit("**Arquivo não suportado.**")
 
     name = "okgoogle.png"
     image.save(name, "PNG")
@@ -63,10 +63,11 @@ async def okgoogle(img):
     fetchUrl = response.headers["Location"]
 
     if response == 400:
-        return await img.edit("**Falha no processamento.**")
+        return await img.edit("**Erro do Google.**")
 
     await img.edit(
-        "**Imagem enviada ao Google com sucesso.**" "\n**Analisando fonte agora.**"
+        "**Imagem carregada com sucesso para o Google.**"
+        "\n**Analisando fonte agora**"
     )
     os.remove(name)
     match = await ParseSauce(fetchUrl + "&preferences?hl=en&fg=1#languages")
@@ -74,7 +75,7 @@ async def okgoogle(img):
     imgspage = match["similar_images"]
 
     if not guess and not imgspage:
-        return await img.edit("**Não foram encontrados resultados.**")
+        return await img.edit("**Não foram encontrados resultados**")
 
     try:
         counter = int(img.pattern_match.group(1))
@@ -85,13 +86,13 @@ async def okgoogle(img):
 
     if counter == 0:
         return await img.edit(
-            f"**Melhor resultado:** `{guess}`\
+            f"**Melhor combinação:** `{guess}`\
                               \n\n[Imagens visualmente semelhantes]({fetchUrl})\
                               \n\n[Resultados para {guess}]({imgspage})"
         )
 
     await img.edit(
-        f"**Melhor resultado:** `{guess}`\
+        f"**Melhor combinação:** `{guess}`\
                    \n\n[Imagens visualmente semelhantes]({fetchUrl})\
                    \n\n[Resultados para {guess}]({imgspage})\
                    \n\n**Buscando imagens...**"
@@ -111,7 +112,7 @@ async def okgoogle(img):
         paths = response.download(arguments)
     except Exception as e:
         return await img.edit(
-            f"**Melhor resultado:** `{guess}`\
+            f"**Melhor combinação:** `{guess}`\
                               \n\n[Imagens visualmente semelhantes]({fetchUrl})\
                               \n\n[Resultados para {guess}]({imgspage})\
                               \n\n**Erro:** `{e}`**.**"
@@ -124,7 +125,7 @@ async def okgoogle(img):
         reply_to=img,
     )
     await img.edit(
-        f"**Melhor resultado:** `{guess}`\
+        f"**Melhor combinação:** `{guess}`\
                    \n\n[Imagens visualmente semelhantes]({fetchUrl})\
                    \n\n[Resultados para {guess}]({imgspage})"
     )
@@ -156,10 +157,10 @@ async def ParseSauce(googleurl):
 
 CMD_HELP.update(
     {
-        "reverse": ">`.reverse [número de resultados] <opcional>`"
-        "\nUso: Responda a uma foto/sticker para fazer uma busca reversa no Google."
+        "reverse": ">`.reverse [número] <opcional>`"
+        "\n**Uso:** Responda a uma foto/sticker para fazer uma busca reversa no Imagens do Google."
         "\nO número de resultados pode ser especificado, o padrão é 3."
         "\nSe o contador for 0, apenas informações e links serão fornecidos."
-        "\nO bot pode falhar no upload de imagens se um grande número de resultados for solicitado."
+        "\nO bot pode falhar ao enviar imagens se um grande número de resultados for solicitado."
     }
 )

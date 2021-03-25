@@ -1,8 +1,7 @@
 # Copyright (C) 2019 The Raphielscape Company LLC.
 #
-# Licensed under the Raphielscape Public License, Version 1.d (the "License");
+# Licensed under the Raphielscape Public License, Version 1.c (the "License");
 # you may not use this file except in compliance with the License.
-#
 
 # (c) Shrimadhav U K - UniBorg
 # Thanks to Prakasaka for porting.
@@ -17,20 +16,19 @@ from userbot import CMD_HELP, REM_BG_API_KEY, TEMP_DOWNLOAD_DIRECTORY
 from userbot.events import register
 
 
-@register(outgoing=True, pattern="^.rbg(?: |$)(.*)")
+@register(outgoing=True, pattern=r"^\.rbg(?: |$)(.*)")
 async def kbg(remob):
     """ For .rbg command, Remove Image Background. """
     if REM_BG_API_KEY is None:
-        await remob.edit(
-            "`Erro: API KEY de remove.bg não encontrada! Adicione-o as ConfigVars no Heroku.`"
+        return await remob.edit(
+            "**Erro: chave da API Remove.BG faltante! Adicione-o as configvars ou config.env.**"
         )
-        return
     input_str = remob.pattern_match.group(1)
     message_id = remob.message.id
     if remob.reply_to_msg_id:
         message_id = remob.reply_to_msg_id
         reply_message = await remob.get_reply_message()
-        await remob.edit("`Processando..`")
+        await remob.edit("**Processando...**")
         try:
             if isinstance(
                 reply_message.media, MessageMediaPhoto
@@ -38,22 +36,20 @@ async def kbg(remob):
                 downloaded_file_name = await remob.client.download_media(
                     reply_message, TEMP_DOWNLOAD_DIRECTORY
                 )
-                await remob.edit("`Removendo fundo desta imagem...`")
+                await remob.edit("**Removendo fundo desta imagem...**")
                 output_file_name = await ReTrieveFile(downloaded_file_name)
                 os.remove(downloaded_file_name)
             else:
-                await remob.edit("`Como faço para remover o fundo deste?`")
+                await remob.edit("**Como faço para remover o fundo deste?**")
         except Exception as e:
-            await remob.edit(str(e))
-            return
+            return await remob.edit(str(e))
     elif input_str:
         await remob.edit(
-            f"`Removendo plano de fundo de imagem online hospedada em`\n{input_str}"
+            f"**Removendo plano de fundo de imagem online hospedada em**\n{input_str}"
         )
         output_file_name = await ReTrieveURL(input_str)
     else:
-        await remob.edit("`Eu preciso de algo para remover o fundo de.`")
-        return
+        return await remob.edit("**Eu preciso de algo para remover o fundo.**")
     contentType = output_file_name.headers.get("content-type")
     if "image" in contentType:
         with io.BytesIO(output_file_name.content) as remove_bg_image:
@@ -61,14 +57,14 @@ async def kbg(remob):
             await remob.client.send_file(
                 remob.chat_id,
                 remove_bg_image,
-                caption="Fundo removido usando remove.bg",
+                caption="Background removed using remove.bg",
                 force_document=True,
                 reply_to=message_id,
             )
             await remob.delete()
     else:
         await remob.edit(
-            "**Erro (API key inválida, eu acho ?)**\n`{}`".format(
+            "**Erro (Chave de API inválida, eu acho?)**\n`{}`".format(
                 output_file_name.content.decode("UTF-8")
             )
         )
@@ -83,14 +79,13 @@ async def ReTrieveFile(input_file_name):
     files = {
         "image_file": (input_file_name, open(input_file_name, "rb")),
     }
-    r = requests.post(
+    return requests.post(
         "https://api.remove.bg/v1.0/removebg",
         headers=headers,
         files=files,
         allow_redirects=True,
         stream=True,
     )
-    return r
 
 
 async def ReTrieveURL(input_url):
@@ -98,19 +93,18 @@ async def ReTrieveURL(input_url):
         "X-API-Key": REM_BG_API_KEY,
     }
     data = {"image_url": input_url}
-    r = requests.post(
+    return requests.post(
         "https://api.remove.bg/v1.0/removebg",
         headers=headers,
         data=data,
         allow_redirects=True,
         stream=True,
     )
-    return r
 
 
 CMD_HELP.update(
     {
-        "rbg": ".rbg <Link da imagem> ou responda a qualquer imagem (Aviso: não funciona em stickers.)\
-\nUso: Remove o fundo das imagens, usando o remove.bg API"
+        "rbg": ">`.rbg <Link para a imagem> ou responda a qualquer imagem (Aviso: não funciona em stickers.)`"
+        "\n**Uso:** Remove o fundo das imagens, usando a API remove.bg"
     }
 )

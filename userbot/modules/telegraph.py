@@ -1,10 +1,3 @@
-# Copyright (C) 2019 The Raphielscape Company LLC.
-#
-# Licensed under the Raphielscape Public License, Version 1.d (the "License");
-# you may not use this file except in compliance with the License.
-#
-# Port From UniBorg to UserBot by @afdulfauzan
-
 import os
 from datetime import datetime
 
@@ -19,10 +12,10 @@ r = telegraph.create_account(short_name="telegraph")
 auth_url = r["auth_url"]
 
 
-@register(outgoing=True, pattern="^.tg (m|t)$")
+@register(outgoing=True, pattern=r"^\.telegraph (media|text)$")
 async def telegraphs(graph):
-    """For .telegraph command, upload media & text to telegraph site."""
-    await graph.edit("`Processando...`")
+    """ For .telegraph command, upload media & text to telegraph site. """
+    await graph.edit("**Processando...**")
     if not graph.text[0].isalpha() and graph.text[0] not in ("/", "#", "@", "!"):
         if graph.fwd_from:
             return
@@ -32,35 +25,30 @@ async def telegraphs(graph):
             start = datetime.now()
             r_message = await graph.get_reply_message()
             input_str = graph.pattern_match.group(1)
-            if input_str == "m":
+            if input_str == "media":
                 downloaded_file_name = await bot.download_media(
                     r_message, TEMP_DOWNLOAD_DIRECTORY
                 )
                 end = datetime.now()
                 ms = (end - start).seconds
                 await graph.edit(
-                    "Baixado para {} em {} segundos.".format(downloaded_file_name, ms)
+                    f"**Baixado para** `{downloaded_file_name}` **em** `{ms}` **segundos.**"
                 )
-                try:
-                    if downloaded_file_name.endswith((".webp")):
-                        resize_image(downloaded_file_name)
-                except AttributeError:
-                    return await graph.edit("`No media provided`")
+                if downloaded_file_name.endswith(".webp"):
+                    resize_image(downloaded_file_name)
                 try:
                     media_urls = upload_file(downloaded_file_name)
                 except exceptions.TelegraphException as exc:
-                    await graph.edit("ERROR: " + str(exc))
+                    await graph.edit("**Erro:** " + str(exc))
                     os.remove(downloaded_file_name)
                 else:
                     os.remove(downloaded_file_name)
                     await graph.edit(
-                        "Successfully Uploaded to [telegra.ph](https://telegra.ph{}).".format(
-                            media_urls[0]
-                        ),
+                        f"**Enviado com sucesso para** [telegra.ph](https://telegra.ph{media_urls[0]})**.**",
                         link_preview=True,
                     )
-            elif input_str == "t":
-                user_object = await bot.get_entity(r_message.from_id)
+            elif input_str == "text":
+                user_object = await bot.get_entity(r_message.sender_id)
                 title_of_page = user_object.first_name  # + " " + user_object.last_name
                 # apparently, all Users do not have last_name field
                 page_content = r_message.message
@@ -81,13 +69,13 @@ async def telegraphs(graph):
                     title_of_page, html_content=page_content
                 )
                 await graph.edit(
-                    "Successfully uploaded to [telegra.ph](https://telegra.ph/{}).".format(
-                        response["path"]
-                    ),
+                    f'**Enviado com sucesso para** [telegra.ph](https://telegra.ph/{response["path"]})**.**',
                     link_preview=True,
                 )
         else:
-            await graph.edit("`Reply to a message to get a permanent telegra.ph link.`")
+            await graph.edit(
+                "**Responda a uma mensagem para obter um link telegra.ph permanente.**"
+            )
 
 
 def resize_image(image):
@@ -97,7 +85,7 @@ def resize_image(image):
 
 CMD_HELP.update(
     {
-        "telegraph": ".tg <m|t>\
-        \nUso: Upload t(text) or m(media) on Telegraph."
+        "telegraph": ">`.telegraph media|text`"
+        "\n**Uso:** Envie texto & mídia no Telegraph."
     }
 )

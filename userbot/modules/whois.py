@@ -1,11 +1,11 @@
 # Copyright (C) 2019 The Raphielscape Company LLC.
 #
-# Licensed under the Raphielscape Public License, Version 1.d (the "License");
+# Licensed under the Raphielscape Public License, Version 1.c (the "License");
 # you may not use this file except in compliance with the License.
 #
 # The entire source code is OSSRPL except 'whois' which is MPL
 # License: MPL and OSSRPL
-""" Userbot module for getiing info about any user on Telegram(including you!). """
+""" Userbot module for getting info about any user on Telegram(including you!). """
 
 import os
 
@@ -18,11 +18,11 @@ from userbot import CMD_HELP, TEMP_DOWNLOAD_DIRECTORY
 from userbot.events import register
 
 
-@register(pattern=".whois(?: |$)(.*)", outgoing=True)
+@register(pattern=r"\.whois(?: |$)(.*)", outgoing=True)
 async def who(event):
 
     await event.edit(
-        "`Espere enquanto eu roubo alguns dados da *Zona de Rede Global*...`"
+        "`Espere enquanto eu roubo alguns dados da **Zona de Rede Global**...`"
     )
 
     if not os.path.isdir(TEMP_DOWNLOAD_DIRECTORY):
@@ -30,16 +30,14 @@ async def who(event):
 
     replied_user = await get_user(event)
     if replied_user is None:
-        await event.edit(
-            "`Este é um administrador anônimo neste grupo.\nNão consigo obter a informação`"
+        return await event.edit(
+            "**Bem, esse é um administrador anônimo, boa sorte para descobrir qual deles!**"
         )
-        return
 
     try:
         photo, caption = await fetch_info(replied_user, event)
     except AttributeError:
-        await event.edit("`Não foi possível buscar as informações desse usuário.`")
-        return
+        return await event.edit("**Não foi possível buscar as informações deste usuário.**")
 
     message_id_to_reply = event.message.reply_to_msg_id
 
@@ -54,7 +52,7 @@ async def who(event):
             link_preview=False,
             force_document=False,
             reply_to=message_id_to_reply,
-            parse_mode="html",
+            parse_mode=r"html",
         )
 
         if not photo.startswith("http"):
@@ -62,16 +60,18 @@ async def who(event):
         await event.delete()
 
     except TypeError:
-        await event.edit(caption, parse_mode="html")
+        await event.edit(caption, parse_mode=r"html")
 
 
 async def get_user(event):
     """ Get the user from argument or replied message. """
     if event.reply_to_msg_id and not event.pattern_match.group(1):
         previous_message = await event.get_reply_message()
-        if previous_message.from_id is None:  # Anonymous admin seems don't have id attr
+        if previous_message.from_id is None and not event.is_private:
             return None
-        replied_user = await event.client(GetFullUserRequest(previous_message.from_id))
+        replied_user = await event.client(
+            GetFullUserRequest(previous_message.sender_id)
+        )
     else:
         user = event.pattern_match.group(1)
 
@@ -93,8 +93,7 @@ async def get_user(event):
             user_object = await event.client.get_entity(user)
             replied_user = await event.client(GetFullUserRequest(user_object.id))
         except (TypeError, ValueError) as err:
-            await event.edit(str(err))
-            return None
+            return await event.edit(str(err))
 
     return replied_user
 
@@ -107,7 +106,7 @@ async def fetch_info(replied_user, event):
         )
     )
     replied_user_profile_photos_count = (
-        "A pessoa precisa de ajuda para enviar a foto do perfil."
+        "A pessoa precisa de ajuda para fazer upload de fotos do perfil."
     )
     try:
         replied_user_profile_photos_count = replied_user_profile_photos.count
@@ -117,9 +116,9 @@ async def fetch_info(replied_user, event):
     first_name = replied_user.user.first_name
     last_name = replied_user.user.last_name
     try:
-        dc_id, location = get_input_location(replied_user.profile_photo)
+        dc_id, _ = get_input_location(replied_user.profile_photo)
     except Exception as e:
-        dc_id = "Não foi possível buscar DC ID!"
+        dc_id = "Não foi possível buscar o DC ID!"
         str(e)
     common_chat = replied_user.common_chats_count
     username = replied_user.user.username
@@ -133,17 +132,13 @@ async def fetch_info(replied_user, event):
     first_name = (
         first_name.replace("\u2060", "")
         if first_name
-        else ("Este usuário não tem primeiro nome")
+        else ("Este usuário não tem nome")
     )
     last_name = (
-        last_name.replace("\u2060", "")
-        if last_name
-        else ("Este usuário não tem sobrenome")
+        last_name.replace("\u2060", "") if last_name else ("Este usuário não tem sobrenome")
     )
-    username = (
-        "@{}".format(username) if username else ("Este usuário não tem nome de usuário")
-    )
-    user_bio = "Este usuário não tem Sobre" if not user_bio else user_bio
+    username = f"@{username}" if username else ("Este usuário não tem nome de usuário")
+    user_bio = "Este usuário não tem uma bio" if not user_bio else user_bio
 
     caption = "<b>INFORMAÇÃO DE USUÁRIO:</b>\n\n"
     caption += f"🗣 Primeiro nome: {first_name}\n"
@@ -165,7 +160,7 @@ async def fetch_info(replied_user, event):
 
 CMD_HELP.update(
     {
-        "whois": ".whois <nome de usuário> ou responda ao texto de alguém com .whois\
-         \nUso: Obtém informações de um usuário."
+        "whois": ">`.whois <nome de usuário> ou responda ao texto de alguém com .whois`"
+        "\n**Uso:** Obtém informações de um usuário."
     }
 )

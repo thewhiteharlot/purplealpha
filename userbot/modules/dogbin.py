@@ -24,7 +24,7 @@ async def neko(nekobin):
     reply_id = nekobin.reply_to_msg_id
 
     if not match and not reply_id:
-        return await pstl.edit("`Não é possível colar o texto.`")
+        return await pstl.edit("**Não é possível colar o texto.**")
 
     if match:
         message = match
@@ -46,7 +46,7 @@ async def neko(nekobin):
             message = message.text
 
     # Nekobin
-    await nekobin.edit("`Colando texto . . .`")
+    await nekobin.edit("**Colando texto . . .**")
     resp = post(NEKOBIN_URL + "api/documents", json={"content": message})
 
     if resp.status_code == 201:
@@ -54,12 +54,12 @@ async def neko(nekobin):
         key = response["result"]["key"]
         nekobin_final_url = NEKOBIN_URL + key
         reply_text = (
-            "`Colado com sucesso!`\n\n"
+            "**Colado com sucesso!**\n\n"
             f"[Nekobin URL]({nekobin_final_url})\n"
             f"[RAW]({NEKOBIN_URL}raw/{key})"
         )
     else:
-        reply_text = "`Falha ao comunicar com Nekobin`"
+        reply_text = "**Falha ao comunicar com Nekobin**"
 
     await nekobin.edit(reply_text)
     if BOTLOG:
@@ -77,7 +77,7 @@ async def paste(pstl):
     reply_id = pstl.reply_to_msg_id
 
     if not match and not reply_id:
-        await pstl.edit("`Elon Musk disse que não posso colar nada.`")
+        await pstl.edit("**Elon Musk disse que não posso colar vazio.**")
         return
 
     if match:
@@ -100,7 +100,7 @@ async def paste(pstl):
             message = message.message
 
     # Dogbin
-    await pstl.edit("`Colando texto . . .`")
+    await pstl.edit("**Colando texto...**")
     resp = post(DOGBIN_URL + "documents", data=message.encode("utf-8"))
 
     if resp.status_code == 200:
@@ -110,20 +110,20 @@ async def paste(pstl):
 
         if response["isUrl"]:
             reply_text = (
-                "`Colado com sucesso!`\n\n"
+                "**Colado com sucesso!**\n\n"
                 f"[URL abreviado]({dogbin_final_url})\n\n"
-                "`URLs originais (não encurtados)`\n"
+                "**URLs originais (não encurtados)**\n"
                 f"[Dogbin URL]({DOGBIN_URL}v/{key})\n"
                 f"[RAW]({DOGBIN_URL}raw/{key})"
             )
         else:
             reply_text = (
-                "`Colado com sucesso!`\n\n"
+                "**Colado com sucesso!**\n\n"
                 f"[Dogbin URL]({dogbin_final_url})\n"
                 f"[RAW]({DOGBIN_URL}raw/{key})"
             )
     else:
-        reply_text = "`Falha ao comunicar com Dogbin`"
+        reply_text = "**Falha na conexão com Dogbin**"
 
     await pstl.edit(reply_text)
     if BOTLOG:
@@ -138,7 +138,7 @@ async def get_dogbin_content(dog_url):
     """ For .getpaste command, fetches the content of a dogbin URL. """
     textx = await dog_url.get_reply_message()
     message = dog_url.pattern_match.group(1)
-    await dog_url.edit("`Obtendo conteúdo dogbin...`")
+    await dog_url.edit("**Obtendo conteúdo dogbin...**")
 
     if textx:
         message = str(textx.message)
@@ -153,7 +153,7 @@ async def get_dogbin_content(dog_url):
     elif message.startswith("del.dog/"):
         message = message[len("del.dog/") :]
     else:
-        await dog_url.edit("`Isso é mesmo um url dogbin?`")
+        await dog_url.edit("**Isso é mesmo um url dogbin?**")
         return
 
     resp = get(f"{DOGBIN_URL}raw/{message}")
@@ -176,7 +176,7 @@ async def get_dogbin_content(dog_url):
         return
 
     reply_text = (
-        "`Conteúdo do URL dogbin buscado com sucesso!`\n\n`Conteúdo:` " + resp.text
+        "`Conteúdo do URL dogbin obtido com sucesso!\n\n**Conteúdo:** " + resp.text
     )
 
     await dog_url.edit(reply_text)
@@ -190,10 +190,10 @@ async def get_dogbin_content(dog_url):
 CMD_HELP.update(
     {
         "dogbin": ">`.paste <texto/resposta>`"
-        "\nUso: Cria uma colagem ou um url encurtado usando dogbin (https://del.dog/)"
+        "\n**Uso:** Cria uma colagem ou um url encurtado usando dogbin (https://del.dog/)"
         "\n\n>`.getpaste`"
-        "\nUso: Obtém o conteúdo de uma colagem ou url encurtada do dogbin (https://del.dog/)"
+        "\n**Uso:** Obtém o conteúdo de uma colagem ou url encurtada do dogbin (https://del.dog/)"
         "\n\n>`.neko <texto/resposta>`"
-        "\nUso: Crie uma colagem ou um url encurtado usando nekobin (https://nekobin.com/)"
+        "\n**Uso:** Crie uma colagem ou um url encurtado usando nekobin (https://nekobin.com/)"
     }
 )

@@ -10,7 +10,7 @@ if not hasattr(STORAGE, "userObj"):
     STORAGE.userObj = False
 
 
-@register(outgoing=True, pattern=r"^\.clone ?(.*)")
+@register(outgoing=True, pattern=r"^\.impostor ?(.*)")
 async def impostor(event):
     inputArgs = event.pattern_match.group(1)
 
@@ -18,11 +18,11 @@ async def impostor(event):
         await event.edit("**Voltando à minha verdadeira identidade...**")
         if not STORAGE.userObj:
             return await event.edit(
-                "**Você precisa se passar por um perfil antes de reverter!**"
+                "**Você precisa clonar um perfil antes de reverter!**"
             )
         await updateProfile(STORAGE.userObj, restore=True)
         return await event.edit("**Revertido com sucesso!**")
-    elif inputArgs:
+    if inputArgs:
         try:
             user = await event.client.get_entity(inputArgs)
         except:
@@ -31,13 +31,11 @@ async def impostor(event):
     elif event.reply_to_msg_id:
         replyMessage = await event.get_reply_message()
         if replyMessage.sender_id is None:
-            return await event.edit(
-                "**Não é possível se passar por administradores anônimos, RIP.**"
-            )
+            return await event.edit("**Não é possível se passar por administradores anônimos, sed.**")
         userObj = await event.client(GetFullUserRequest(replyMessage.sender_id))
     else:
         return await event.edit(
-            "**Digite** `.help clone` **para aprender como usá-lo.**"
+            "**Use** `.help impersonate` **para aprender como usá-lo.**"
         )
 
     if not STORAGE.userObj:
@@ -47,7 +45,7 @@ async def impostor(event):
 
     await event.edit("**Roubando a identidade dessa pessoa aleatória...**")
     await updateProfile(userObj)
-    await event.edit("**Eu sou você e você sou eu.**")
+    await event.edit("**Eu sou você e você é eu, somos um só.**")
 
 
 async def updateProfile(userObj, restore=False):
@@ -87,12 +85,12 @@ async def updateProfile(userObj, restore=False):
 
 CMD_HELP.update(
     {
-        "clone": ">`.clone` (como uma resposta a uma mensagem de um usuário)\
-    \nUso: Rouba a identidade do usuário.\
-    \n\n>`.impostor <nome do usuário/ID>`\
-    \nUso: Rouba o nome de usuário/id fornecida.\
+        "impostor": ">`.impostor` (como uma resposta a uma mensagem de um usuário)\
+    \n**Uso:** Rouba a identidade do usuário.\
+    \n\n>`.impostor <username/ID>`\
+    \n**Uso:** Rouba do nome de usuário/ID fornecido.\
     \n\n>`.impostor restore`\
-    \nUso: Reverta para sua verdadeira identidade.\
+    \n**Uso:** Reverta para sua verdadeira identidade.\
     \n\n**Sempre restaure antes de executá-lo novamente.**\
 "
     }

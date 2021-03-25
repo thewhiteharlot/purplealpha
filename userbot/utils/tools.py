@@ -1,13 +1,24 @@
-# Copyright (C) 2019 Adek Maulana
+# Copyright (C) 2020 Adek Maulana
 #
-# Licensed under the Raphielscape Public License, Version 1.d (the "License");
-# you may not use this file except in compliance with the License.
+# SPDX-License-Identifier: GPL-3.0-or-later
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 #
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
+import asyncio
 import hashlib
 import re
-
-from telethon.tl.types import DocumentAttributeFilename
+from typing import Union
 
 
 async def md5(fname: str) -> str:
@@ -18,7 +29,7 @@ async def md5(fname: str) -> str:
     return hash_md5.hexdigest()
 
 
-def humanbytes(size: int) -> str:
+def humanbytes(size: Union[int, float]) -> str:
     if size is None or isinstance(size, str):
         return ""
 
@@ -36,10 +47,10 @@ def time_formatter(seconds: int) -> str:
     hours, minutes = divmod(minutes, 60)
     days, hours = divmod(hours, 24)
     tmp = (
-        ((str(days) + " day(s), ") if days else "")
-        + ((str(hours) + " hour(s), ") if hours else "")
-        + ((str(minutes) + " minute(s), ") if minutes else "")
-        + ((str(seconds) + " second(s), ") if seconds else "")
+        ((str(days) + " dia(s), ") if days else "")
+        + ((str(hours) + " hora(s), ") if hours else "")
+        + ((str(minutes) + " minuto(s), ") if minutes else "")
+        + ((str(seconds) + " segundo(s), ") if seconds else "")
     )
     return tmp[:-2]
 
@@ -61,30 +72,13 @@ def human_to_bytes(size: str) -> int:
     return int(float(number) * units[unit])
 
 
-async def check_media(reply_message):
-    if reply_message and reply_message.media:
-        if reply_message.photo:
-            data = reply_message.photo
-        elif reply_message.document:
-            if (
-                DocumentAttributeFilename(file_name="AnimatedSticker.tgs")
-                in reply_message.media.document.attributes
-            ):
-                return False
-            if (
-                reply_message.gif
-                or reply_message.video
-                or reply_message.audio
-                or reply_message.voice
-            ):
-                return False
-            data = reply_message.media.document
-        else:
-            return False
-    else:
-        return False
-
-    if not data or data is None:
-        return False
-    else:
-        return data
+async def run_cmd(cmd: list) -> tuple[bytes, bytes]:
+    process = await asyncio.create_subprocess_exec(
+        *cmd,
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.PIPE,
+    )
+    out, err = await process.communicate()
+    t_resp = out.strip()
+    e_resp = err.strip()
+    return t_resp, e_resp

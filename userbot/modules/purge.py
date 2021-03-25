@@ -1,6 +1,6 @@
 # Copyright (C) 2019 The Raphielscape Company LLC.
 #
-# Licensed under the Raphielscape Public License, Version 1.d (the "License");
+# Licensed under the Raphielscape Public License, Version 1.c (the "License");
 # you may not use this file except in compliance with the License.
 #
 """ Userbot module for purging unneeded messages(usually spam or ot). """
@@ -9,11 +9,11 @@ from asyncio import sleep
 
 from telethon.errors import rpcbaseerrors
 
-from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
+from userbot import CMD_HELP
 from userbot.events import register
 
 
-@register(outgoing=True, pattern="^.purge$")
+@register(outgoing=True, pattern=r"^\.purge$")
 async def fastpurger(purg):
     """ For .purge command, purge all messages starting from the reply. """
     chat = await purg.get_input_chat()
@@ -24,32 +24,24 @@ async def fastpurger(purg):
     if purg.reply_to_msg_id is not None:
         async for msg in itermsg:
             msgs.append(msg)
-            count = count + 1
+            count += 1
             msgs.append(purg.reply_to_msg_id)
             if len(msgs) == 100:
                 await purg.client.delete_messages(chat, msgs)
                 msgs = []
     else:
-        await purg.edit("`Eu preciso de uma mensagem para começar a limpar.`")
-        return
+        return await purg.edit("**I need a mesasge to start purging from.**")
 
     if msgs:
         await purg.client.delete_messages(chat, msgs)
     done = await purg.client.send_message(
-        purg.chat_id,
-        f"`Limpeza rápida completa!`\
-        \nForam limpadas {str(count)} mensagens",
+        purg.chat_id, "**Fast purge complete!**" f"\nPurged {str(count)} messages"
     )
-
-    if BOTLOG:
-        await purg.client.send_message(
-            BOTLOG_CHATID, "Foram limpadas " + str(count) + " mensagens com sucesso."
-        )
     await sleep(2)
     await done.delete()
 
 
-@register(outgoing=True, pattern="^.purgeme")
+@register(outgoing=True, pattern=r"^\.purgeme")
 async def purgeme(delme):
     """ For .purgeme, delete x count of your latest message."""
     message = delme.text
@@ -59,23 +51,19 @@ async def purgeme(delme):
     async for message in delme.client.iter_messages(delme.chat_id, from_user="me"):
         if i > count + 1:
             break
-        i = i + 1
+        i += 1
         await message.delete()
 
     smsg = await delme.client.send_message(
         delme.chat_id,
-        "`Limpeza completa!` Foram limpadas " + str(count) + " mensagens.",
+        "**Limpeza completa!** Limpadas " + str(count) + " mensagens.",
     )
-    if BOTLOG:
-        await delme.client.send_message(
-            BOTLOG_CHATID, "Foram limpadas " + str(count) + " mensagens com sucesso."
-        )
     await sleep(2)
     i = 1
     await smsg.delete()
 
 
-@register(outgoing=True, pattern="^.del$")
+@register(outgoing=True, pattern=r"^\.del$")
 async def delete_it(delme):
     """ For .del command, delete the replied message. """
     msg_src = await delme.get_reply_message()
@@ -83,18 +71,11 @@ async def delete_it(delme):
         try:
             await msg_src.delete()
             await delme.delete()
-            if BOTLOG:
-                await delme.client.send_message(
-                    BOTLOG_CHATID, "Mensagem deletada com sucesso"
-                )
         except rpcbaseerrors.BadRequestError:
-            if BOTLOG:
-                await delme.client.send_message(
-                    BOTLOG_CHATID, "Não posso deletar essa mensagem"
-                )
+            await delme.edit("**Bem, eu não posso deletar uma mensagem.**")
 
 
-@register(outgoing=True, pattern="^.edit")
+@register(outgoing=True, pattern=r"^\.edit")
 async def editer(edit):
     """ For .editme command, edit your last message. """
     message = edit.text
@@ -107,59 +88,30 @@ async def editer(edit):
             await message.edit(string)
             await edit.delete()
             break
-        i = i + 1
-    if BOTLOG:
-        await edit.client.send_message(BOTLOG_CHATID, "Mensagem editada com sucesso")
+        i += 1
 
 
-@register(outgoing=True, pattern="^.sd")
+@register(outgoing=True, pattern=r"^\.sd")
 async def selfdestruct(destroy):
-    """ For .sd command, make self-destructable messages. """
+    """ For .sd command, make seflf-destructable messages. """
     message = destroy.text
     counter = int(message[4:6])
     text = str(destroy.text[6:])
-    await destroy.delete()
-    smsg = await destroy.client.send_message(destroy.chat_id, text)
+    await destroy.edit(text)
     await sleep(counter)
-    await smsg.delete()
-    if BOTLOG:
-        await destroy.client.send_message(
-            BOTLOG_CHATID, "Mensagem auto-destruída com sucesso"
-        )
+    await destroy.delete()
 
 
 CMD_HELP.update(
     {
-        "purge": ".purge\
-        \nUso: Limpa todas as mensagens a partir da resposta."
-    }
-)
-
-CMD_HELP.update(
-    {
-        "purgeme": ".purgeme <x>\
-        \nUso: Exclui x quantidade de suas mensagens mais recentes."
-    }
-)
-
-CMD_HELP.update(
-    {
-        "del": ".del\
-\nUso: Exclui a mensagem que você respondeu."
-    }
-)
-
-CMD_HELP.update(
-    {
-        "edit": ".edit <nova mensagem>\
-\nUso: Substitui sua última mensagem por <nova mensagem>."
-    }
-)
-
-CMD_HELP.update(
-    {
-        "sd": ".sd <x> <mensagem>\
-\nUso: Cria uma mensagem que se autodestrói em x segundos.\
-\nMantenha os segundos abaixo de 100, pois isso coloca seu bot para dormir."
+        "purge": ">`.purge`" "\n**Uso:** Limpa todas as mensagens a partir da resposta.",
+        "purgeme": ">`.purgeme <x>`"
+        "\n**Uso:** Exclui x quantidade de suas mensagens mais recentes.",
+        "del": ">`.del`" "\n**Uso:** Exclui a mensagem que você respondeu.",
+        "edit": ">`.edit <newmessage>`"
+        "\n**Uso:** Substitua sua última mensagem por <nova mensagem>.",
+        "sd": ">`.sd <x> <mensagem>`"
+        "\n**Uso:** Cria uma mensagem que se autodestrói em x segundos."
+        "\n<x> deve ser um valor de dois dígitos, o terceiro dígito e outros dígitos serão considerados como <mensagem>.",
     }
 )

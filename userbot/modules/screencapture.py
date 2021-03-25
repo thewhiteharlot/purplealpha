@@ -29,7 +29,7 @@ async def capture(url):
     if link_match:
         link = link_match.group()
     else:
-        return await url.edit("**Preciso de um link válido para capturar a tela.**")
+        return await url.edit("**Preciso de um link válido para fazer capturas de tela.**")
     driver.get(link)
     height = driver.execute_script(
         "return Math.max(document.body.scrollHeight, document.body.offsetHeight, "
@@ -47,7 +47,7 @@ async def capture(url):
         "**Gerando captura de tela da página...**"
         f"\nAltura da página = {height}px"
         f"\nLargura da página = {width}px"
-        f"\nAguardando ({int(wait_for)}s) para a página carregar."
+        f"\nEsperando ({int(wait_for)}s) para a página carregar."
     )
     await sleep(int(wait_for))
     im_png = driver.get_screenshot_as_png()
@@ -58,7 +58,7 @@ async def capture(url):
         message_id = url.reply_to_msg_id
     with io.BytesIO(im_png) as out_file:
         out_file.name = "screencapture.png"
-        await url.edit("**Carregando a captura de tela como arquivo...**")
+        await url.edit("**Fazendo upload da captura de tela como arquivo...**")
         await url.client.send_file(
             url.chat_id,
             out_file,
@@ -71,7 +71,7 @@ async def capture(url):
 CMD_HELP.update(
     {
         "ss": ">`.ss <url>`"
-        "\nUso: Tira uma captura de tela de um site e a envia."
+        "\n**Uso:** Tira uma captura de tela de um site e a envia."
         "\nExemplo de um URL válido : `https://www.google.com`"
     }
 )
